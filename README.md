@@ -1,6 +1,6 @@
 ## Landtales 
 
-Landtales est un site de voyage imaginaire sur lequel vous pouvez vous pouvez voyager.
+Landtales est un site de voyage imaginaire sur lequel vous pouvez voyager.
 
 Projet Annuel de l'année 2023-2024 à l'ESGI en Première Année.
 
