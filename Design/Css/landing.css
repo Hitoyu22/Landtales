@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+    font-family: Poppins, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Pour éviter le débordement horizontal */
+}
+
+
+.page {
+    background-image: linear-gradient(180deg, #000 0%, #41414F 100%);
+    color: white;
+    padding: 20px; /* Pour ajouter de l'espace autour de la page */
+}
+
+img {
+    height: 20vh;
+    width: 20vh;
+    max-width: 100%;
+}
+
+.logo-container {
+    position: relative;
+}
+
+.logo {
+    height: auto;
+    width: 20vh;
+    max-width: 100%;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 8.1vh;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-size: 4vh;
+}
+
+h3 {
+    margin-bottom: 0;
+    font-weight: normal !important;
+    font-size: 2.5vh;
+}
+
+button.btn-outline-light {
+    border-radius: 100px !important;
+    border: 2px solid #FFF !important;
+    width: 28vh !important;
+    height: 10vh !important;
+    font-weight: bold !important;
+    font-size: 2vh;
+    margin-top: 8vh;
+    margin-bottom: 16.5vh;
+}
+
+.img-landing {
+    width: 70%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.img-landing3 {
+    width: 30%; /* Réduction de la taille de l'image sur PC */
+    margin: 0 auto;
+    display: block;
+}
+
+/* Media Queries for responsive design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 6vh;
+    }
+
+    h2 {
+        font-size: 3.5vh;
+    }
+
+    h3 {
+        font-size: 2vh;
+    }
+
+    button.btn-outline-light {
+        width: 20vh !important;
+        height: 8vh !important;
+        font-size: 1.5vh;
+    }
+
+    .img-landing {
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    h1 {
+        font-size: 4vh;
+    }
+
+    h2 {
+        font-size: 3vh;
+    }
+
+    h3 {
+        font-size: 1.8vh;
+    }
+
+    button.btn-outline-light {
+        width: 18vh !important;
+        height: 7vh !important;
+        font-size: 1.2vh;
+    }
+
+    .img-landing {
+        width: 100%;
+        height: auto;
+        border-radius: 15px;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+}
+
+/* Ajout pour fixer les débordements éventuels */
+.row {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.container {
+    max-width: 100%;
+    padding: 0 10%; /* Ajout de padding pour garantir que le contenu est bien centré */
+}
+
+.col-md-12, .col-md-6 {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Espacement entre les div */
+.row.mb-4 {
+    margin-bottom: 2rem;
+}
+
+/* Centrage vertical du texte à côté des images */
+.align-items-center {
+    display: flex;
+    align-items: center;
+}
+
+/* Centrage horizontal du texte sous la troisième image */
+.text-center {
+    text-align: center;
+}
+
+.star-wallpaper{
+    width: 100vw;
+    height: 100vh;
+    background: url("../Pictures/star.png");
+    position : absolute;
+    z-index: -100;
+}

@@ -1,0 +1,45 @@
+.message-input {
+
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    border-top: 1px solid #ccc;
+}
+.message-area {
+    padding-bottom: 80px;
+    overflow-y: scroll;
+
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+.wrapper {
+    display: flex;
+    height: 100%;
+}
+
+.main {
+    flex-grow: 1;
+    overflow: hidden;
+    padding-bottom: 100px;
+}
+
+.message-area {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+}
+
+@media only screen and (max-width: 768px) {
+        .input-group{
+            margin-bottom: 50px;
+        }
+
+    .message-area {
+        height: calc(100% - 150px);
+        overflow-y: auto;
+    }
+
+}

@@ -1,0 +1,246 @@
+.mainquiz{
+    font-weight: bold!important;
+}
+
+#quizdiv{
+    margin-top: 4vh !important;
+}
+
+#gamequiztitle{
+    margin-bottom: 3.8vh !important;
+}
+
+#quizimg{
+    background: #E7ECFE!important;
+    max-width: 72vh;
+    max-height: 42vh;
+    margin: auto;
+    margin-top: 2vh;
+    margin-bottom: 4vh;
+    border-radius: 15px;
+    height: 82vh;;
+}
+
+#quizresult{
+    background: #E7ECFE!important;
+    max-width: 72vh;
+    max-height: 52vh;
+    margin: auto;
+    margin-top: 6vh;
+    border-radius: 15px;
+    height: 82vh;
+}
+
+#quiztext{
+    font-size: 2vh;
+    font-weight: bold;
+}
+
+#resultscore{
+    font-size: 15vh;
+    margin-bottom: 2vh;
+    margin-top: 0 !important;
+}
+
+#resulttext{
+    font-size: 4vh;
+    margin-bottom: 7vh;
+    font-weight: bold;
+}
+
+#resultcoins{
+    font-size: 4vh;
+    font-weight: bold;
+}
+
+#resulttitle{
+    font-weight: bold;
+    font-size: 5vh;
+    margin-top: 2.5vh;
+}
+
+.img1 {
+    background: #E7ECFE!important;
+    max-width: 47vh;
+    max-height: 34vh;
+    border-radius: 15px !important;
+    height: 82vh;
+    margin-right: 2vh;
+    aspect-ratio: 2;
+}
+
+.img2 {
+    background-color: blue; /* ou toute autre couleur de fond souhaitée */
+    border-radius: 1rem;
+}
+
+
+
+h1{
+    margin-bottom: 7vh;
+    margin-top: 3vh !important;
+    margin-left: 0;
+}
+
+#quiztitle{
+    margin-bottom: 0.5rem;
+    margin-top: 0 !important;
+}
+
+.col-md{
+    margin-bottom: 2vh;
+    display: flex;
+}
+
+#correct{
+    margin-right: 1vh;
+    margin-top: 1.5vh;
+}
+
+label{
+    font-weight: bold;
+}
+
+textarea::placeholder{
+    font-weight: bold;
+    color: #000000;;
+    font-size: 3vh;
+
+}
+
+textarea{
+    margin-bottom: 12vh;
+}
+
+::placeholder{
+    font-weight: bold;
+}
+
+#answer{
+    margin-right: 2vh;
+}
+
+
+input[type="checkbox"] {
+    width: 1vh;
+    height: 1vh;
+}
+
+#textquestion {
+    font-size: 3vh;
+}
+
+
+h1{
+    font-weight: bold;
+}
+
+#quizbtn{
+    background-color: #E7ECFE;
+}
+
+#desc{
+    font-weight: bold;
+    font-size: 3vh;
+}
+
+#qestiontitle{
+    font-weight: bold;
+}
+
+button.btne {
+
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: black;
+    background-color: #E7ECFE;
+    padding: 1% 13%;
+    border: none;
+    box-shadow: none;
+    border-radius: 75px !important;
+    transition : 1000ms;
+    transform: translateY(0);
+    display: absolute;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+button.btne:hover{
+
+    transition : 1000ms;
+    padding: 1.8% 22%;
+    transform : translateY(-0px);
+    background-color: #E7ECFE;
+    color: black;
+    border: none;
+}
+
+button.btnequiz {
+
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: black;
+    background-color: #CAD5FF;
+    padding: 8% 8%;
+    border: none;
+    box-shadow: none;
+    border-radius: 15px !important;
+    transition : 1000ms;
+    transform: translateY(0);
+    display: absolute;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+button.btnequizgame {
+
+    font-weight: 700;
+    font-size: 1.5vh;
+    color: black;
+    background-color: #CAD5FF;
+    padding: 0.5% 2%;
+    border: none;
+    box-shadow: none;
+    border-radius: 12px !important;
+    transition : 1000ms;
+    transform: translateY(0);
+    display: absolute;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+button.btnequizgame:hover{
+
+    transition : 1000ms;
+    padding: 0.55% 3%;
+    transform : translateY(-0px);
+    background-color: #CAD5FF;
+    color: black;
+    border: none;
+}
+
+#btnquizdiv{
+    margin-bottom: 0!important;
+}
+
+
+img.img-quiz{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.btn-check-outlined {
+    width: 100%;
+}
+.form-check {
+    padding-right: 15px;
+    padding-left: 15px;
+}

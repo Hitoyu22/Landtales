@@ -1,0 +1,114 @@
+.div-pleine-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../Pictures/star.png), linear-gradient(180deg, #000 0%, #41414F 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    color: white;
+}
+
+.logoe {
+    padding-top: 0%;
+    padding-bottom: 0%;
+}
+
+.logoei {
+    height: 15%;
+    width: 15%;
+}
+
+.erdiv {
+    padding-left: 0%;
+    padding-right: 0%;
+}
+
+.textee {
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.textee h1 {
+    font-weight: 700;
+    font-size: 3.3rem;
+    margin-bottom: 6%;
+}
+
+.textee h5 {
+    font-size: 1.5rem;
+}
+
+button.btne {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: black;
+    background-color: white;
+    padding: 1% 13%;
+    border: none;
+    box-shadow: none;
+    border-radius: 75px !important;
+    transition: 1000ms;
+    transform: translateY(0);
+    display: absolute;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+button.btne:hover {
+    transition: 1000ms;
+    padding: 1.8% 22%;
+    transform: translateY(0px);
+    background-color: white;
+    color: black;
+    border: none;
+}
+
+@media (max-width: 767px) {
+    .div-pleine-page {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .textee h1 {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 3%;
+    }
+
+    .textee h5 {
+        font-size: 1.1rem;
+        margin-bottom: 5%;
+        margin-left: 20%;
+        margin-right: 20%;
+    }
+
+    .textee {
+        display: flex;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+
+    .logoei {
+        height: 20%;
+        width: 20%;
+    }
+
+    .logoe {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5%;
+    }
+}

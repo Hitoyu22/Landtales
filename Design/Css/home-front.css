@@ -1,0 +1,150 @@
+
+.picture-best-travel {
+    background-color: #0a53be;
+    color: var(--actuel-ecrit-inverse-couleur);
+    border-radius: 15px;
+    position: relative; /* Nécessaire pour positionner correctement le texte par-dessus l'image */
+    aspect-ratio: 3; /* Ajustez ceci selon vos besoins pour contrôler le rapport hauteur / largeur */
+    overflow: hidden; /* Empêche l'image de déborder */
+}
+
+img.travel-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.best-travel-text {
+    position: absolute;
+    z-index: 2; /* S'assure que le texte est au-dessus de l'image */
+    width: 100%;
+    padding: 20px; /* Ajoutez un padding pour le texte */
+    box-sizing: border-box; /* Inclut le padding dans la largeur calculée */
+    text-align: center;
+    bottom: 10%; /* Ajustez la position du texte à l'intérieur de la div */
+}
+
+.voyage-miniature {
+    background-color: red;
+    aspect-ratio: 1;
+    border-radius: 15px;
+}
+
+.shop-picture {
+    background-color: yellow;
+    aspect-ratio: 3;
+    border-radius: 15px;
+    background-size: cover;
+}
+
+
+.quiz-miniature{
+    background-color: green;
+    aspect-ratio: 1;
+
+    border-radius: 15px;
+}
+
+h2{
+    font-weight: bold;
+}
+
+.other-travel,
+.other-quiz{
+    padding:0;
+}
+
+.miniature-img {
+    overflow: hidden;
+    background-size: cover;
+}
+
+.best-travel{
+    padding:0;
+}
+
+.best-travel {
+    position: relative;
+}
+
+@media (min-width: 768px) {
+    .best-travel {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+
+        justify-content: center;
+
+        height: 100%; /* Utilisez la hauteur à 100% pour occuper toute la hauteur de la div parente */
+    }
+
+    .picture-best-travel {
+        background-color: #0a53be;
+        color: var(--actuel-ecrit-inverse-couleur);
+        border-radius: 15px;
+        position: relative;
+        aspect-ratio: 3;
+    }
+
+    .best-travel-text {
+        text-align: start;
+        left: 0;
+
+
+    }
+
+    .travel {
+        display: block;
+    }
+
+
+}
+
+
+.content-shop{
+    text-align: center;
+    display: none;
+}
+
+a{
+    text-decoration: none;
+    color: var(--actuel-ecrit-couleur);
+}
+
+
+.create-travel-text{
+    text-align: center;
+}
+
+
+.content {
+    display: flex;
+    flex-direction: column; /* Pour empiler les éléments verticalement */
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* Centre également le texte horizontalement */
+
+}
+
+
+.btn-see-other{
+    display: flex;
+
+}
+
+
+
+.best-travel-contain{
+    margin-left : 0 !important;
+    margin-right : 0 !important;
+}
+
+
+.shop{
+    padding-left:0 !important;
+    padding-right: 0 !important;
+}
+
+.margin-top-more{
+    margin-top : 6rem !important;
+}

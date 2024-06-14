@@ -1,0 +1,59 @@
+RewriteEngine On
+
+# Exclure les requêtes vers les fichiers PDF dans le dossier Structure/Pdf
+RewriteCond %{REQUEST_URI} ^/Structure/Pdf/.*\.pdf$ [NC]
+RewriteRule ^ - [L]
+
+# Exclure les requêtes POST vers upload.php
+RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{REQUEST_URI} ^/Endpoint/upload\.php$ [NC]
+RewriteRule ^ - [L]
+
+# Exclure les requêtes POST vers uploadNewsletter.php
+RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{REQUEST_URI} ^/Endpoint/uploadNewsletter\.php$ [NC]
+RewriteRule ^ - [L]
+
+# Redirection des requêtes avec .php vers l'URL sans .php
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteRule ^ /%1 [R=302,L,NE]
+
+# Exclure les requêtes spécifiques vers index.php avec un paramètre d'erreur
+RewriteCond %{REQUEST_URI} !^/index\.php\?error=.*$ [NC]
+
+# Exclure les fichiers statiques comme CSS, JS, PNG et JPG de la réécriture
+RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg)$ [NC]
+
+# Rediriger tout le reste vers index.php
+RewriteRule ^((?!/).*)$ index.php [L,NC]
+
+
+#Configuration des erreurs
+ErrorDocument 400 /Error/Erreur400.php
+ErrorDocument 401 /Error/Erreur401.php
+ErrorDocument 403 /Error/Erreur403.php
+ErrorDocument 404 /Error/Erreur404.php
+ErrorDocument 408 /Error/Erreur408.php
+ErrorDocument 500 /Error/Erreur500.php
+ErrorDocument 502 /Error/Erreur502.php
+ErrorDocument 503 /Error/Erreur503.php
+
+<IfModule mod_headers.c>
+    # Strict-Transport-Security
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # X-Frame-Options
+    Header always set X-Frame-Options "DENY"
+
+    # X-Content-Type-Options
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Referrer-Policy
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+
+    # Permissions-Policy
+    Header always set Permissions-Policy "geolocation=(), microphone=()"
+</IfModule>
+
+
+
