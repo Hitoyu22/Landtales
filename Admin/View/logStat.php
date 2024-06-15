@@ -11,7 +11,7 @@ try {
     $connectionsQuery = $bdd->query("
         SELECT DATE_FORMAT(log_datetime, '%d/%m/%Y') as log_date, COUNT(*) as connection_count
         FROM log
-        WHERE log_type = 'Connexion' AND log_datetime >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)
+        WHERE log_type = 'Connexion' AND log_datetime >= DATE_SUB(CURDATE(), INTERVAL 5 DAY)
         GROUP BY log_date
     ");
     $connections = $connectionsQuery->fetchAll(PDO::FETCH_ASSOC);

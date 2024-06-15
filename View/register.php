@@ -51,14 +51,18 @@ if (isset($_POST['valider'])) {
 
     $today = date('Y-m-d');
 
-    if ($bans['permaBan'] == 1) {
-        header("Location: register.php?permaBan=true");
-        exit();
-    } elseif (!is_null($bans['tempBan']) && $bans['tempBan'] >= $today) {
-        $tempBanDate = urlencode($bans['tempBan']);  // Encode the date properly
-        header("Location: register.php?tempBan=true&date={$tempBanDate}");
-        exit();
+    if ($nbEmail > 0){
+        if ($bans['permaBan'] == 1) {
+            header("Location: register.php?permaBan=true");
+            exit();
+        } elseif (!is_null($bans['tempBan']) && $bans['tempBan'] >= $today) {
+            $tempBanDate = urlencode($bans['tempBan']);  // Encode the date properly
+            header("Location: register.php?tempBan=true&date={$tempBanDate}");
+            exit();
+        }
     }
+
+
 
 
     // Vérification de la conformité des données

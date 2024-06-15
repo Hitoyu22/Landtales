@@ -99,18 +99,20 @@ function tab_without_first_index($first_index,$tab,$key_modified){
     return $result;
 }
 
-function modify_sql($table,$id,$colonne,$value, $bdd){
-    //on obtient la valeur de la table donnée en parametre
-    //Il faudra modifier la fonction lors de son importation sur le site
+function modify_sql($table, $id, $colonne, $value, $bdd){
+    // Prepare the SQL statement
+    $query = $bdd->prepare("UPDATE $table SET $colonne = :value WHERE id = :id");
 
-    if(gettype($value)==="string"){
-        $value = "'$value'";
-    }
-    $query = $bdd->prepare('UPDATE '.$table.' SET '.$colonne.' = '.$value.' WHERE id='.$id);
-    $query ->execute();
-    header("Location: {$_SERVER['REQUEST_URI']}");
+    // Bind parameters
+    $query->bindParam(':value', $value);
+    $query->bindParam(':id', $id);
 
-    //$result = $query ->fetchAll();
+    // Execute the query
+    $query->execute();
+
+    // Redirect back to the referring page
+    header("Location: {$_SERVER['REQUEST_URI']}?change=success");
+    exit; // Make sure to exit after redirection
 }
 function html_modify_popup($objet) {
     $name_id = tab_keys($objet)[0];

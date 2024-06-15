@@ -77,7 +77,7 @@ if (isset($_COOKIE['theme'])) {
 
             <div class="row">
                 <div class="col-md-6">
-                    <h6>Nombre de connexion sur 7 jours</h6>
+                    <h6>Nombre de connexion sur 5 jours</h6>
                     <canvas id="lineChart" width="400" height="400"></canvas>
                     <ul id="lineLegend" class="legend"></ul>
                 </div>
