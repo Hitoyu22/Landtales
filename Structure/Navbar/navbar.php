@@ -30,7 +30,7 @@
 
 <div id="fullscreen-search" class="fullscreen-search d-none">
     <div class="search-container">
-        <input id="fullscreen-search-input" type="search" class="form-control me-2 search-bar-input" placeholder="Recherche..." autocomplete="off">
+        <input id="fullscreen-search-input" type="search" class="form-control mx-2" placeholder="Recherche..." autocomplete="off">
         <button id="close-search" class="close-search">&times;</button>
     </div>
     <div class="container-fluid justify-content-between mt-3">
