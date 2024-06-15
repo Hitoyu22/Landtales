@@ -30,12 +30,12 @@ if (isset($_GET['idclient']) AND !empty($_GET['idclient']) AND isset($_GET['acco
 
 
     }else{
-        echo "Votre clé ou identifiant est incorrect.";
+        header("Location: Error/Erreur404.php");
     }
 
 
 }else{
-    echo 'Aucun utilisateur trouvé';
+    header("Location: Error/Erreur404.php");
 }
 
 ?>
