@@ -25,7 +25,8 @@ require "Structure/Head/head.php";
                     <p class="lead">Explorer l'infini des mondes imaginaires à travers les mots de nos vaoyageurs érudits. Bienvenue dans notre univers fantastique où chaque récit est une porte ouverte vers l'extraordinaire !</p>
                 </div>
                 <div class="col-12 text-center">
-                    <a href="register.php" class="btn btn-xl btn-light">Rejoindre Landtales</a>
+                    <a href="register.php" class="btn btn-xl btn-light mx-3">Rejoindre Landtales</a>
+                    <a href="login.php" class="btn btn-xl btn-light mx-3">Se connecter</a>
                 </div>
             </div>
         </div>
@@ -263,8 +264,9 @@ require "Structure/Head/head.php";
                     </div>
                 </div>
             </div>
-            <div class="col-12 mt-5 text-center">
-                <a href="register.php" class="btn btn-xl btn-light">Rejoindre Landtales</a>
+            <div class="col-12 text-center mt-5">
+                <a href="register.php" class="btn btn-xl btn-light mx-3">Rejoindre Landtales</a>
+                <a href="login.php" class="btn btn-xl btn-light mx-3">Se connecter</a>
             </div>
         </div>
 
