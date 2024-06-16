@@ -691,11 +691,6 @@ img.miniature-main-travel-img {
     cursor: pointer;
 }
 
-.fullscreen-search input {
-    width: calc(100% - 40px);
-    padding: 10px;
-    font-size: 1.5rem;
-}
 
 @media (min-width: 992px) {
     .loupe-search {

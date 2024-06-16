@@ -115,7 +115,7 @@ if (isset($_COOKIE['theme'])) {
                     <div class="container-fluid position-relative d-lg-none d-xl-none mt-5 margin-top-more">
                         <div class="best-travel-text text-center mb-3">
                             <h2><?php echo html_entity_decode($mainTravel['title']); ?></h2>
-                            <h5>Par <?php echo html_entity_decode($clientMainTravelPseudo['pseudo']); ?></h5>
+                            <h5>Par <?php echo html_entity_decode($mainTravel['pseudo']); ?></h5>
                         </div>
 
                         <div class="d-flex justify-content-center">

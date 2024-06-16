@@ -16,33 +16,113 @@ checkUserRole();
 // Définition de la variable $travels
 $travels = [];
 
-// Traitement du formulaire POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['reset'])) {
+        // Réinitialisation des paramètres POST
+        unset($_POST['popular']);
+        unset($_POST['young']);
+        unset($_POST['old']);
+        unset($_POST['theme']);
+    }
+
     if (isset($_POST['popular'])) {
-        $query = 'SELECT id, miniature, title, idclient FROM travel WHERE travel_status = 1 AND visibility = 1 ORDER BY (SELECT COUNT(*) FROM travel_view WHERE travel_view.idtravel = travel.id) DESC';
+        $query = "
+                SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+                FROM travel t
+                LEFT JOIN client c ON t.idclient = c.id
+                LEFT JOIN travel_view tv ON t.id = tv.idtravel
+                WHERE t.travel_status = 1 AND t.visibility = 1
+                GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+                ORDER BY view_count DESC
+            ";
         $travels = $bdd->query($query)->fetchAll();
+
+
     } elseif (isset($_POST['young'])) {
-        $query = 'SELECT id, miniature, title, idclient FROM travel WHERE travel_status = 1 AND visibility = 1 ORDER BY travel_date DESC';
+        $query = "
+                SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+                FROM travel t
+                LEFT JOIN client c ON t.idclient = c.id
+                LEFT JOIN travel_view tv ON t.id = tv.idtravel
+                WHERE t.travel_status = 1 AND t.visibility = 1
+                GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+                ORDER BY t.travel_date DESC
+            ";
         $travels = $bdd->query($query)->fetchAll();
+
+
     } elseif (isset($_POST['old'])) {
-        $query = 'SELECT id, miniature, title, idclient FROM travel WHERE travel_status = 1 AND visibility = 1 ORDER BY travel_date ASC';
+        $query = "
+            SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+            FROM travel t
+            LEFT JOIN client c ON t.idclient = c.id
+            LEFT JOIN travel_view tv ON t.id = tv.idtravel
+            WHERE t.travel_status = 1 AND t.visibility = 1
+            GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+            ORDER BY t.travel_date ASC
+        ";
         $travels = $bdd->query($query)->fetchAll();
-    } elseif (isset($_POST['theme']) && !empty($_POST['theme'])) {
-        $query = 'SELECT id, miniature, title, idclient FROM travel WHERE travel_status = 1 AND visibility = 1 AND idtheme = ? ORDER BY travel_date ASC';
+
+    } else if (isset($_POST['theme']) && !empty($_POST['theme'])) {
+            $query = "
+            SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+            FROM travel t
+            LEFT JOIN client c ON t.idclient = c.id
+            LEFT JOIN travel_view tv ON t.id = tv.idtravel
+            WHERE t.travel_status = 1 AND t.visibility = 1
+            AND t.idtheme = ?
+            GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+            ORDER BY t.travel_date ASC
+        ";
         $travelThemeList = $bdd->prepare($query);
         $travelThemeList->execute([$_POST['theme']]);
         $travels = $travelThemeList->fetchAll();
     } else {
-        $query = 'SELECT id, miniature, title, idclient FROM travel WHERE travel_status = 1 AND visibility = 1';
-        $travelAll = $bdd->query($query);
-        $travels = $travelAll->fetchAll();
+        $travelAlgo = recommendationAlgorithm($bdd, $userId);
+
+        $str = "";
+        if (empty($travelAlgo)) {
+            $str = "('')";
+        } else {
+            $str = "(".implode(', ', $travelAlgo).")";
+        }
+
+        $query = "
+                SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+                FROM travel t
+                LEFT JOIN client c ON t.idclient = c.id
+                LEFT JOIN travel_view tv ON t.id = tv.idtravel
+                WHERE t.id IN {$str}
+                GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+            ";
+        $travels = $bdd->prepare($query);
+        $travels->execute();
+        $travels = $travels->fetchAll();
+
     }
-} else {
-    // Si aucun POST n'a été envoyé, récupérez tous les voyages par défaut
-    $query = 'SELECT id, miniature, title, idclient FROM travel WHERE travel_status = 1 AND visibility = 1';
-    $travelAll = $bdd->query($query);
-    $travels = $travelAll->fetchAll();
+    } else {
+    $travelAlgo = recommendationAlgorithm($bdd, $userId);
+
+    $str = "";
+    if (empty($travelAlgo)) {
+        $str = "('')";
+    } else {
+        $str = "(".implode(', ', $travelAlgo).")";
+    }
+
+    $query = "
+            SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+            FROM travel t
+            LEFT JOIN client c ON t.idclient = c.id
+            LEFT JOIN travel_view tv ON t.id = tv.idtravel
+            WHERE t.id IN {$str}
+            GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+        ";
+    $travels = $bdd->prepare($query);
+    $travels->execute();
+    $travels = $travels->fetchAll();
 }
+
 
 $travelTheme = $bdd->prepare("SELECT id, theme_name FROM travel_theme");
 $travelTheme->execute();
@@ -84,20 +164,25 @@ if (isset($_COOKIE['theme'])) {
                     <div class="mb-3">
                         <button type="submit" class="btn-landtales" name="popular">Les plus populaires</button>
                         <button type="submit" class="btn-landtales" name="young">Les plus récents</button>
-                        <button type="submit" class="btn-landtales"  name="old">Les plus anciens</button>
+                        <button type="submit" class="btn-landtales" name="old">Les plus anciens</button>
+                        <?php if (isset($_POST['popular']) || isset($_POST['young']) || isset($_POST['old']) || isset($_POST['theme'])) : ?>
+                            <button type="submit" class="btn-landtales" name="reset">Réinitialiser</button>
+                        <?php endif; ?>
                     </div>
 
                     <div class="col-md-6 col-12">
                         <select class="form-control w-100" id="genre" name="theme" onchange="this.form.submit()">
-                            <option value="" selected>Choisir un thème</option>
-                            <?php foreach ($travelThemeValue as $theme){ ?>
-                                <option value="<?php echo $theme['id']; ?>">
+                            <option value="" <?php echo (!isset($_POST['theme']) || empty($_POST['theme'])) ? 'selected' : ''; ?>>Choisir un thème</option>
+                            <?php foreach ($travelThemeValue as $theme) : ?>
+                                <option value="<?php echo $theme['id']; ?>" <?php echo (isset($_POST['theme']) && $_POST['theme'] == $theme['id']) ? 'selected' : ''; ?>>
                                     <?php echo $theme['theme_name']; ?>
                                 </option>
-                            <?php }; ?>
+                            <?php endforeach; ?>
                         </select>
                     </div>
+
                 </form>
+
             </div>
 
 
@@ -107,17 +192,9 @@ if (isset($_COOKIE['theme'])) {
                         $idtravel = $travel['id'];
                         $miniature = $travel['miniature'];
                         $title = $travel['title'];
-                        $creator = $travel['idclient'];
-
-                        $creatorName = $bdd->prepare("SELECT pseudo FROM client WHERE id = ?");
-                        $creatorName->execute([$creator]);
-                        $userCreator = $creatorName->fetch();
-                        $creatorTravel = $userCreator['pseudo'];
-
-                        $viewCountQuery = $bdd->prepare('SELECT COUNT(*) AS view_count FROM travel_view WHERE idtravel = ?');
-                        $viewCountQuery->execute([$idtravel]);
-                        $viewCountResult = $viewCountQuery->fetch();
-                        $viewNumber = $viewCountResult['view_count'];?>
+                        $creator = $travel['creator_name'];
+                        $viewNumber = $travel['view_count'];
+                        ?>
 
                         <div class="col-md-3 mb-4 travel-container">
                             <a href="travel.php?id=<?php echo $idtravel; ?>" class="text-decoration-none" title="<?php echo $title; ?>">
@@ -125,7 +202,7 @@ if (isset($_COOKIE['theme'])) {
                                     <img class="card-img-top" src="<?php echo $miniature; ?>">
                                 </div>
                                 <h5><?php echo $title; ?></h5>
-                                <p class="mb-0">Par <?php echo $creatorTravel; ?></p>
+                                <p class="mb-0">Par <?php echo $creator; ?></p>
                                 <p><?php echo ($viewNumber > 1 ? $viewNumber . " vues" : $viewNumber . " vue") ?></p>
                             </a>
                         </div>
