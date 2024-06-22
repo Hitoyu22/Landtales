@@ -34,11 +34,8 @@ require "Structure/Head/head.php";
         </div>
     </div>
 </div>
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
+<script src="../Structure/Functions/script.js"></script>
+
 </body>
 </html>
 

@@ -6,7 +6,7 @@ if (isset($_GET['idclient']) AND !empty($_GET['idclient']) AND isset($_GET['acco
 
     $getId = $_GET['idclient'];
     $getCle = $_GET['account_verification_key'];
-    $recupUser = $bdd->prepare('SELECT * FROM client WHERE id = ? AND account_verification_key = ?');
+    $recupUser = $bdd->prepare('SELECT id, account_verificated FROM client WHERE id = ? AND account_verification_key = ?');
     $recupUser->execute(array($getId, $getCle));
     if ($recupUser->rowCount() > 0){
         $userInfo = $recupUser->fetch();

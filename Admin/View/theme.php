@@ -1,5 +1,6 @@
 <?php
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 
 session_start();
 if (isset($_SESSION['idclient'])) {
@@ -59,8 +60,8 @@ if (isset($_SESSION['idclient'])) {
 
 function get_table($nom_table, $bdd){
 
-    $query = $bdd->query('SELECT id,theme_name FROM '.$nom_table);
-    // Définir le style de récupération à PDO::FETCH_ASSOC
+    $query = $bdd->prepare('SELECT id, theme_name FROM ' . $nom_table);
+    $query->execute();
     $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
     return $result;
@@ -169,20 +170,6 @@ function update_table($nom_table,$bdd){
 }
 function afficher_tableau($donnees, $nom_table,$bdd) {
     ?>
-    <style>
-        .table {
-            --bs-table-bg: transparent;
-        }
-        table.table-custom-alternative-row-color thead {
-            background-color: var(--actuel-bouton-couleur);
-        }
-        table.table-custom-alternative-row-color tbody tr:nth-of-type(2n+1) {
-            background-color: var(--actuel-footer-bas-couleur);
-        }
-        table.table-custom-alternative-row-color tbody tr:nth-of-type(2n) {
-            background-color: var(--actuel-barre-recherche-couleur);
-        }
-    </style>
     <div class="table-responsive">
         <table class="table table-bordered table-custom-alternative-row-color">
             <thead>
@@ -211,13 +198,13 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                         echo "<td>".html_entity_decode($attribut)."</td>";
                     }
                     $id = $objet[$head[0]];
-                    $query = $bdd->prepare('SELECT COUNT(*) AS count FROM travel WHERE idtheme = ?');
+                    $query = $bdd->prepare('SELECT COUNT(idtheme) AS count FROM travel WHERE idtheme = ?');
                     $query->execute([$id]);
                     $result = $query->fetch(PDO::FETCH_ASSOC);
                     $count = $result['count'];
 
                     echo "<td>
-            <button type='button' class='btn btn-primary' onclick='openModifyModal($id)'>Modifier</button>";
+            <button type='button' class='btn btn-primary' onclick=\"openModifyModal($id, 'theme')\">Modifier</button>";
                     if ($count == 0) {
                         echo "<button type='button' class='btn btn-danger' onclick='openDeleteModal($id)'>Supprimer</button>";
                     }
@@ -244,24 +231,6 @@ if (isset($_COOKIE['theme'])) {
 ?>
 
 <link rel="stylesheet" href="../../Design/Css/style.css">
-<link rel="stylesheet" href="../Design/Css/home-admin.css">
-<style>
-    .popup-overlay{
-        position : fixed;
-        top:0;
-        left: 0;
-        right: 0;
-        bottom:0;
-        background: rgba(255,255,255,0.7);
-        z-index:100;
-        display:none;
-    }
-
-    .popup-overlay.openPopup{
-        display: block !important;
-    }
-
-</style>
 </head>
 <body class="hidden" data-bs-theme="<?php echo $theme; ?>">
 <?php require "Admin/Structures/Navbar/navbarAdmin.php";?>
@@ -444,60 +413,9 @@ if (isset($_COOKIE['theme'])) {
         </div>
     </div>
 </div>
-<script>
-    function togglePopup($id){
-        let popup = document.querySelector($id);
-        popup.classList.toggle("openPopup");
-    }
-</script>
-<script>
-
-    async function openModifyModal(id) {
-        try {
-            const response = await fetch(`databaseTreatment.php?id=${id}&table=theme`);
-            const data = await response.json();
-
-            // Clear previous content
-            const modifyFormContent = document.getElementById('modifyFormContent');
-            modifyFormContent.innerHTML = '';
-
-            // Fill the form with fetched data
-            for (const [key, value] of Object.entries(data)) {
-                const div = document.createElement('div');
-                div.classList.add('form-group');
-                const label = document.createElement('label');
-                label.setAttribute('for', `input${key}`);
-                label.textContent = key;
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.classList.add('form-control');
-                input.id = `input${key}`;
-                input.name = `${id}tab[${key}]`;
-                input.value = value;
-                div.appendChild(label);
-                div.appendChild(input);
-                modifyFormContent.appendChild(div);
-            }
-
-            // Set the hidden ID input value
-            document.getElementById('modifyId').value = id;
-
-            // Show the modal
-            const modifyModal = new bootstrap.Modal(document.getElementById('modifyModal'));
-            modifyModal.show();
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-    function openDeleteModal(id) {
-        document.getElementById('deleteId').value = id;
-        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
-        deleteModal.show();
-    }
-</script>
 <script src="../Structure/Functions/bootstrap.js"></script>
 <script src="../Structure/Functions/script.js"></script>
+<script src="Structures/Functions/admin.js"></script>
 </body>
 
 </html>

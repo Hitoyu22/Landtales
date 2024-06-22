@@ -77,7 +77,7 @@ if (isset($_SESSION['idclient'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->Port = 465;
             $mail->Username = 'landtales.website@gmail.com';
-            $mail->Password = 'Secret';
+            $mail->Password = 'brcc snha dbbh ywct';
             $mail->IsHTML(true);
             $mail->From = "landtales.website@gmail.com";
             $mail->FromName = 'Landtales : Newsletter';

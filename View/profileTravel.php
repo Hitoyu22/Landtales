@@ -4,6 +4,7 @@ session_start();
 $pageTitle = "Paramètres - Vos voyages";
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 
 
 if(isset($_SESSION['idclient'])) {
@@ -133,13 +134,13 @@ if (isset($_COOKIE['theme'])) {
                         }
 
                         // Requête pour compter le nombre de vues pour ce voyage
-                        $viewCountQuery = $bdd->prepare('SELECT COUNT(*) AS view_count FROM travel_view WHERE idtravel = ?');
+                        $viewCountQuery = $bdd->prepare('SELECT COUNT(idtravel) AS view_count FROM travel_view WHERE idtravel = ?');
                         $viewCountQuery->execute([$travelId]);
                         $viewCountResult = $viewCountQuery->fetch();
                         $viewNumber = $viewCountResult['view_count'];
 
                         // Requête pour compter le nombre de likes pour ce voyage
-                        $likeCountQuery = $bdd->prepare('SELECT COUNT(*) AS like_count FROM travel_like WHERE idtravel = ?');
+                        $likeCountQuery = $bdd->prepare('SELECT COUNT(idtravel) AS like_count FROM travel_like WHERE idtravel = ?');
                         $likeCountQuery->execute([$travelId]);
                         $likeCountResult = $likeCountQuery->fetch();
                         $likeNumber = $likeCountResult['like_count'];
@@ -204,27 +205,10 @@ if (isset($_COOKIE['theme'])) {
         <?php require "Structure/Footer/footer.php";?>
     </div>
 </div>
-<script>
-    $(document).ready(function() {
-        $('.delete-btn').on('click', function() {
-            var travelId = $(this).data('travel-id');
-            $('#travelIdToDelete').val(travelId);
-        });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var deleteButtons = document.querySelectorAll('.delete-btn');
-        deleteButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var travelId = this.getAttribute('data-travel-id');
-                document.getElementById('travelIdToDelete').value = travelId;
-            });
-        });
-    });
-</script>
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
+<script src="Structure/Functions/travel.js"></script>
+
 </body>
 
 </html>

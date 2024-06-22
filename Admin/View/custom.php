@@ -2,6 +2,7 @@
 session_start();
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 
 if (isset($_SESSION['idclient'])) {
     $userId = $_SESSION['idclient'];
@@ -99,7 +100,6 @@ if (isset($_COOKIE['theme'])) {
 }
 ?>
 <link rel="stylesheet" href="../../Design/Css/style.css">
-<link rel="stylesheet" href="../Design/Css/home-admin.css">
 </head>
 <body class="hidden" data-bs-theme="<?php echo $theme; ?>">
 <?php require "Admin/Structures/Navbar/navbarAdmin.php"; ?>
@@ -155,9 +155,11 @@ if (isset($_COOKIE['theme'])) {
                     <tbody>
                     <?php
                     $query = "SELECT picture, picture_name, price, id, promo_code, end_date_code FROM customisation";
-                    $result = $bdd->query($query);
-                    if ($result->rowCount() > 0) {
-                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    $stmt = $bdd->prepare($query);
+                    $stmt->execute();
+
+                    if ($stmt->rowCount() > 0) {
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td><img src='" . html_entity_decode($row['picture']) . "' style='width:100px; height:100px;'></td>";
                             echo "<td>" . html_entity_decode($row['picture_name']) . "</td>";
@@ -240,64 +242,6 @@ if (isset($_COOKIE['theme'])) {
     </div>
     <script src="../Structure/Functions/bootstrap.js"></script>
     <script src="../Structure/Functions/script.js"></script>
-    <script>
-        var editModal = document.getElementById('editModal');
-        editModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var customId = button.getAttribute('data-custom-id');
-            var name = button.getAttribute('data-name');
-            var cost = button.getAttribute('data-cost');
-            var promoCode = button.getAttribute('data-promo-code');
-            var endDate = button.getAttribute('data-end-date');
-            var modal = this;
-            modal.querySelector('#editCustomId').value = customId;
-            modal.querySelector('#editName').value = name;
-            modal.querySelector('#editCost').value = cost;
-            modal.querySelector('#editPromoCode').value = promoCode || '';
-            modal.querySelector('#editEndDate').value = endDate || '';
-        });
-
-        var deleteModal = document.getElementById('deleteModal');
-        deleteModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget;
-            var customId = button.getAttribute('data-custom-id');
-            var inputDelete = deleteModal.querySelector('#deleteCustomId');
-            inputDelete.value = customId;
-        });
-
-        document.getElementById('customImage').addEventListener('change', function(event) {
-            const [file] = event.target.files;
-            if (file) {
-                if (file.size > 512 * 1024) {
-                    alert("L'image doit être de 500 Ko maximum.");
-                    event.target.value = "";
-                    return;
-                }
-
-                const fileType = file.type;
-                if (fileType !== 'image/png') {
-                    alert("Seul le format PNG est autorisé.");
-                    event.target.value = '';
-                    return;
-                }
-
-                const fileURL = URL.createObjectURL(file);
-
-                let img = new Image();
-                img.src = fileURL;
-                img.onload = function() {
-                    if (img.width > 500 || img.height > 500) {
-                        alert("La résolution de l'image doit être de 500x500 pixels maximum.");
-                        URL.revokeObjectURL(img.src);
-                        event.target.value = "";
-                    } else {
-                        const preview = document.getElementById('previewImage');
-                        preview.src = fileURL;
-                        preview.style.display = 'block';
-                    }
-                };
-            }
-        });
-    </script>
+    <script src="Structures/Functions/admin.js"></script>
 </body>
 </html>

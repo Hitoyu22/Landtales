@@ -66,7 +66,7 @@ if (isset($_COOKIE['theme'])) {
                     $userCreator = $creatorName->fetch(); // This fetches the next row from the result set as an array
                     $creatorTravel = $userCreator['pseudo'];
 
-                    $viewCountQuery = $bdd->prepare('SELECT COUNT(*) AS view_count FROM travel_view WHERE idtravel = ?');
+                    $viewCountQuery = $bdd->prepare('SELECT COUNT(idtravel) AS view_count FROM travel_view WHERE idtravel = ?');
                     $viewCountQuery->execute([$idtravel]);
                     $viewCountResult = $viewCountQuery->fetch();
                     $viewNumber = $viewCountResult['view_count'];?>

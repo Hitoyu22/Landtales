@@ -3,6 +3,8 @@ $pageTitle = "Mot de passe oublié";
 
 require "Includes/PHPMailerAutoload.php";
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 session_start();
 
 require "Structure/Bdd/config.php";
@@ -110,7 +112,7 @@ permaBan();
         <form method="post" action="">
             <label for="password" class="text-white">Email</label>
             <div class="form-group position-relative d-flex">
-                <i class="fas fa-envelope fa-lg"></i>
+                <i class="fas fa-envelope fa-lg mt-3"></i>
                 <input type="email" id="email" name="email" autocomplete="off" placeholder="Saisissez votre adresse mail">
 
             </div>
@@ -121,21 +123,6 @@ permaBan();
                 <button type="submit" class="btn btn-primary btn-login" name="valider" >Connexion</button>
             </div>
         </form>
-
-        <script>
-            function togglePassword(inputId, iconId) {
-                var passwordField = document.getElementById(inputId);
-                var passwordToggleBtn = document.getElementById(iconId);
-
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    passwordToggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                } else {
-                    passwordField.type = "password";
-                    passwordToggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-                }
-            }
-        </script>
         <script src="Structure/Functions/bootstrap.js"></script>
         <script src="Structure/Functions/script.js"></script>
 </body>

@@ -1,5 +1,7 @@
 <?php
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 
 session_start();
 if (isset($_SESSION['idclient'])) {
@@ -57,9 +59,10 @@ if (isset($_SESSION['idclient'])) {
 
 function get_table($nom_table, $bdd){
 
-    $query = $bdd->query('SELECT id,title,newsletter_date FROM '.$nom_table);
-    // Définir le style de récupération à PDO::FETCH_ASSOC
-    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    $query = 'SELECT id, title, newsletter_date FROM ' . $nom_table;
+    $stmt = $bdd->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     return $result;
 }
@@ -167,20 +170,6 @@ function update_table($nom_table,$bdd){
 }
 function afficher_tableau($donnees, $nom_table,$bdd) {
     ?>
-    <style>
-        .table {
-            --bs-table-bg: transparent;
-        }
-        table.table-custom-alternative-row-color thead {
-            background-color: var(--actuel-bouton-couleur);
-        }
-        table.table-custom-alternative-row-color tbody tr:nth-of-type(2n+1) {
-            background-color: var(--actuel-footer-bas-couleur);
-        }
-        table.table-custom-alternative-row-color tbody tr:nth-of-type(2n) {
-            background-color: var(--actuel-barre-recherche-couleur);
-        }
-    </style>
     <div class="table-responsive">
         <table class="table table-bordered table-custom-alternative-row-color">
             <thead>
@@ -234,27 +223,10 @@ if (isset($_COOKIE['theme'])) {
 ?>
 
 <link rel="stylesheet" href="../../Design/Css/style.css">
-<link rel="stylesheet" href="../Design/Css/home-admin.css">
 <style>
-    .popup-overlay{
-        position : fixed;
-        top:0;
-        left: 0;
-        right: 0;
-        bottom:0;
-        background: rgba(255,255,255,0.7);
-        z-index:100;
-        display:none;
-    }
-
-    .popup-overlay.openPopup{
-        display: block !important;
-    }
-
     img{
         width: 100%;
     }
-
 </style>
 </head>
 <body class="hidden" data-bs-theme="<?php echo $theme; ?>">
@@ -435,36 +407,10 @@ if (isset($_COOKIE['theme'])) {
         </div>
     </div>
 </div>
-<script>
-    function togglePopup($id){
-        let popup = document.querySelector($id);
-        popup.classList.toggle("openPopup");
-    }
-</script>
-<script>
-
-    async function seeNewsletter(id) {
-        try {
-            const response = await fetch(`databaseTreatment.php?id=${id}&table=newsletter`);
-            const responseData = await response.json(); // Convertir la réponse JSON en objet JavaScript
-
-            // Extraire le contenu HTML de la réponse
-            const htmlContent = responseData.html;
-
-            // Afficher le contenu HTML dans la modale
-            const seeNewsletterContent = document.getElementById('seeNewsletterContent');
-            seeNewsletterContent.innerHTML = htmlContent;
-
-            // Afficher la modale
-            const seeNewsletterModal = new bootstrap.Modal(document.getElementById('seeNewsletterModal'));
-            seeNewsletterModal.show();
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données:', error);
-        }
-    }
-</script>
 <script src="../Structure/Functions/bootstrap.js"></script>
 <script src="../Structure/Functions/script.js"></script>
+<script src="Structures/Functions/admin.js"></script>
+
 </body>
 
 </html>

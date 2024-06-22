@@ -36,12 +36,12 @@ logActivity($userId, $pseudo, $pageId, $logType, $logPath);
     $friends = $friendsQuery->fetchAll();
 
 
-    $receivedRequestsQuery = $bdd->prepare("SELECT * FROM friend JOIN client ON client.id = friend.idclient1 WHERE idclient2 = ? AND accepted = 1");
+    $receivedRequestsQuery = $bdd->prepare("SELECT id,pseudo FROM friend JOIN client ON client.id = friend.idclient1 WHERE idclient2 = ? AND accepted = 1");
     $receivedRequestsQuery->execute([$userId]);
     $receivedRequests = $receivedRequestsQuery->fetchAll();
 
 
-    $sentRequestsQuery = $bdd->prepare("SELECT * FROM friend JOIN client ON client.id = friend.idclient2 WHERE idclient1 = ? AND accepted = 1");
+    $sentRequestsQuery = $bdd->prepare("SELECT id,pseudo FROM friend JOIN client ON client.id = friend.idclient2 WHERE idclient1 = ? AND accepted = 1");
     $sentRequestsQuery->execute([$userId]);
     $sentRequests = $sentRequestsQuery->fetchAll();
 

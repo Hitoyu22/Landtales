@@ -148,11 +148,11 @@ if (isset($_COOKIE['theme'])) {
             <form id="editor-form" method="post" action="" enctype="multipart/form-data">
                 <div class="form-group mb-4">
                     <label for="title">Le titre de votre voyage</label>
-                    <input type="text" id="title" name="title" value="<?php echo html_entity_decode($title); ?>" placeholder="Saisissez votre titre" class="form-control">
+                    <input type="text" id="title" name="title" value="<?php echo str_replace('&#039;', "'", $title); ?>" placeholder="Saisissez votre titre" class="form-control">
                 </div>
                 <div class="form-group mb-4">
                     <label for="summary">Résumé de votre voyage (Ne sera affiché que si mis en avant sur votre profil)</label>
-                    <textarea class="form-control" rows="3" id="summary" placeholder="Saisissez votre résumé" name="summary"  required><?php echo html_entity_decode($summary) ?></textarea>
+                    <textarea class="form-control" rows="3" id="summary" placeholder="Saisissez votre résumé" name="summary"  required><?php echo str_replace('&#039;', "'", $summary) ?></textarea>
                 </div>
                 <div class="container">
                     <div id="editor"></div>

@@ -8,13 +8,16 @@ $connections = [];
 $popularPages = [];
 
 try {
-    $connectionsQuery = $bdd->query("
-        SELECT DATE_FORMAT(log_datetime, '%d/%m/%Y') as log_date, COUNT(*) as connection_count
-        FROM log
-        WHERE log_type = 'Connexion' AND log_datetime >= DATE_SUB(CURDATE(), INTERVAL 5 DAY)
-        GROUP BY log_date
-    ");
-    $connections = $connectionsQuery->fetchAll(PDO::FETCH_ASSOC);
+    $query = "
+    SELECT DATE_FORMAT(log_datetime, '%d/%m/%Y') as log_date, COUNT(*) as connection_count
+    FROM log
+    WHERE log_type = 'Connexion' AND log_datetime >= DATE_SUB(CURDATE(), INTERVAL 5 DAY)
+    GROUP BY log_date
+";
+
+    $stmt = $bdd->prepare($query);
+    $stmt->execute();
+    $connections = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     usort($connections, function($a, $b) {
         $dateA = DateTime::createFromFormat('d/m/Y', $a['log_date']);
@@ -22,15 +25,18 @@ try {
         return $dateA <=> $dateB;
     });
 
-    $popularPagesQuery = $bdd->query("
-        SELECT p.page_name, COUNT(*) as visit_count
-        FROM log l
-        JOIN pages p ON l.idpage = p.id
-        WHERE l.idpage NOT IN (1000, 1001)
-        GROUP BY p.page_name
-        ORDER BY visit_count DESC
-    ");
-    $popularPages = $popularPagesQuery->fetchAll(PDO::FETCH_ASSOC);
+    $query = "
+    SELECT p.page_name, COUNT(*) as visit_count
+    FROM log l
+    JOIN pages p ON l.idpage = p.id
+    WHERE l.idpage NOT IN (1000, 1001)
+    GROUP BY p.page_name
+    ORDER BY visit_count DESC
+";
+
+    $stmt = $bdd->prepare($query);
+    $stmt->execute();
+    $popularPages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo json_encode(['error' => $e->getMessage()]);
     exit;

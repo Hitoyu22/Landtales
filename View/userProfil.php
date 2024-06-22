@@ -48,7 +48,7 @@ if(isset($_GET['id'])) {
     $userIconPath = isset($user['profil_picture']) ? $user['profil_picture'] : "https://landtales.freeddns.org/Design/Pictures/banner_base.png";
     $customUser = isset($user['idcustomisation']) ? $user['idcustomisation'] : "";
 
-    $numberOfTravelsQuery = $bdd->prepare('SELECT COUNT(*) AS num_travels FROM travel WHERE idclient = ? AND travel_status = 1 AND visibility = 1');
+    $numberOfTravelsQuery = $bdd->prepare('SELECT COUNT(idclient) AS num_travels FROM travel WHERE idclient = ? AND travel_status = 1 AND visibility = 1');
     $numberOfTravelsQuery->execute([$userId]);
     $numberOfTravelsResult = $numberOfTravelsQuery->fetch();
     $numTravels = $numberOfTravelsResult['num_travels'];
@@ -56,11 +56,11 @@ if(isset($_GET['id'])) {
 
 $travelFirst = $bdd->prepare('
     SELECT t.title, t.id, t.summary, t.miniature,
-           (SELECT COUNT(*) FROM travel_like tl WHERE tl.idtravel = t.id) AS like_count,
-           (SELECT COUNT(*) FROM travel_view tv WHERE tv.idtravel = t.id) AS view_count
+           (SELECT COUNT(idtravel) FROM travel_like tl WHERE tl.idtravel = t.id) AS like_count,
+           (SELECT COUNT(idtravel) FROM travel_view tv WHERE tv.idtravel = t.id) AS view_count
     FROM travel t
     WHERE t.idclient = ? AND t.travel_status = 1 AND t.visibility = 1
-    ORDER BY (SELECT COUNT(*) FROM travel_view tv WHERE tv.idtravel = t.id) DESC
+    ORDER BY (SELECT COUNT(idtravel) FROM travel_view tv WHERE tv.idtravel = t.id) DESC
     LIMIT 1
 ');
 $travelFirst->execute([$userId]);
@@ -90,7 +90,7 @@ require "friendRequest.php";
 
 
 
-    $numberOfFollowersQuery = $bdd->prepare('SELECT COUNT(*) AS num_followers FROM follower WHERE idclientfollowed = ?');
+    $numberOfFollowersQuery = $bdd->prepare('SELECT COUNT(idclientfollowed) AS num_followers FROM follower WHERE idclientfollowed = ?');
     $numberOfFollowersQuery->execute([$userId]);
     $numberOfFollowers = $numberOfFollowersQuery->fetchColumn();
 

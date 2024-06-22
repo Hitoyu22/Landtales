@@ -2,6 +2,8 @@
 session_start();
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 
 if (!isset($_SESSION['idclient'])) {
     header("Location: login.php");
@@ -60,7 +62,7 @@ if (isset($_COOKIE['theme'])) {
                     $miniature = $quiz['quiz_picture'];
                     $title = $quiz['title'];
 
-                    $quizDone = $bdd->prepare('SELECT COUNT(*) AS quizDone FROM client_answer WHERE idquiz = ?');
+                    $quizDone = $bdd->prepare('SELECT COUNT(idquiz) AS quizDone FROM client_answer WHERE idquiz = ?');
                     $quizDone->execute([$idQuiz]);
                     $numberDone = $quizDone->fetch();
                     ?>

@@ -4,6 +4,7 @@ session_start();
 $pageTitle = "Paramètres - Général";
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 
 if(isset($_SESSION['idclient'])) {
     $userId = $_SESSION['idclient'];

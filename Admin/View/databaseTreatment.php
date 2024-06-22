@@ -37,17 +37,17 @@ if (isset($_GET['id']) && isset($_GET['table'])) {
             break;
         case 'friend':
             list($idclient1, $idclient2) = explode('_', $id);
-            $query = $bdd->prepare('SELECT * FROM friend WHERE idclient1 = ? AND idclient2 = ? OR idclient1 = ? AND idclient2 = ?');
+            $query = $bdd->prepare('SELECT idclient1,idclient2,accepted FROM friend WHERE idclient1 = ? AND idclient2 = ? OR idclient1 = ? AND idclient2 = ?');
             $query->execute([intval($idclient1), intval($idclient2), intval($idclient2), intval($idclient1)]);
             break;
         case 'travel_like':
             list($idclient, $idtravel) = explode('_', $id);
-            $query = $bdd->prepare('SELECT * FROM travel_like WHERE idclient = ? AND idtravel = ?');
+            $query = $bdd->prepare('SELECT idtravel,idclient FROM travel_like WHERE idclient = ? AND idtravel = ?');
             $query->execute([intval($idclient), intval($idtravel)]);
             break;
         case 'travel_view':
             list($idtravel, $idclient, $travel_view_date) = explode('_', $id);
-            $query = $bdd->prepare('SELECT * FROM travel_view WHERE idtravel = ? AND idclient = ? AND travel_view_date = ?');
+            $query = $bdd->prepare('SELECT idclient,idtravel,travel_view_date FROM travel_view WHERE idtravel = ? AND idclient = ? AND travel_view_date = ?');
             $query->execute([intval($idtravel), intval($idclient), $travel_view_date]);
             break;
         default:

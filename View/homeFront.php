@@ -96,13 +96,13 @@ if (isset($_COOKIE['theme'])) {
                             <div class="picture-best-travel ratio d-flex flex-column justify-content-end">
 
                                 <div class="picture-best-travel">
-                                    <img src="<?php echo html_entity_decode($mainTravel['banner']); ?>" alt="Description de l'image" class="travel-img">
+                                    <img src="<?php echo str_replace('&#039;', "'", $mainTravel['banner']); ?>" alt="Description de l'image" class="travel-img">
                                 </div>
                                 <div class="row align-items-end mb-3 ml-0 mr-0 best-travel-contain ">
                                     <div class="col-md-12 d-lg-block d-xl-block d-xl-block d-none">
                                         <div class="best-travel-text col-md-6">
-                                            <h2 class="text-white"><?php echo html_entity_decode($mainTravel['title']); ?></h2>
-                                            <h5 class="text-white">Par <?php echo html_entity_decode($mainTravel['pseudo']); ?></h5>
+                                            <h2 class="text-white"><?php echo str_replace('&#039;', "'", $mainTravel['title']); ?></h2>
+                                            <h5 class="text-white">Par <?php echo str_replace('&#039;', "'", $mainTravel['pseudo']); ?></h5>
                                         </div>
                                         <div class="d-flex justify-content-end col-md-12 mb-3">
                                             <button onclick="window.location.href='travel.php?id=<?php echo $mainTravel['id']; ?>'" class="btn-landtales btn  align-self-end">Accéder au voyage ></button>
@@ -114,8 +114,8 @@ if (isset($_COOKIE['theme'])) {
                     </div>
                     <div class="container-fluid position-relative d-lg-none d-xl-none mt-5 margin-top-more">
                         <div class="best-travel-text text-center mb-3">
-                            <h2><?php echo html_entity_decode($mainTravel['title']); ?></h2>
-                            <h5>Par <?php echo html_entity_decode($mainTravel['pseudo']); ?></h5>
+                            <h2><?php echo str_replace('&#039;', "'", $mainTravel['title']); ?></h2>
+                            <h5>Par <?php echo str_replace('&#039;', "'", $mainTravel['pseudo']); ?></h5>
                         </div>
 
                         <div class="d-flex justify-content-center">
@@ -132,9 +132,9 @@ if (isset($_COOKIE['theme'])) {
                         <?php foreach ($othersTravel as $othertravel) {?>
                             <a href="travel.php?id=<?php echo $othertravel['id']; ?>" title="Titre du voyage" class="col-md-3 col-sm-12 ">
                                 <div class="quiz-miniature miniature-img">
-                                    <img src="<?php echo html_entity_decode($othertravel['miniature']); ?>" alt="Miniature du voyage" class="travel-img">
+                                    <img src="<?php echo str_replace('&#039;', "'", $othertravel['miniature']); ?>" alt="Miniature du voyage" class="travel-img">
                                 </div>
-                                <h4><?php echo html_entity_decode($othertravel['title']); ?></h4>
+                                <h4><?php echo str_replace('&#039;', "'", $othertravel['title']); ?></h4>
                             </a>
                         <?php }?>
                     </div>
@@ -187,9 +187,9 @@ if (isset($_COOKIE['theme'])) {
                         <?php foreach ($othersquiz as $otherquiz) {?>
                             <a href="homeQuiz.php?id=<?php echo $otherquiz['id'] ?>" title="Titre du voyage" class="col-md-3 col-sm-12 ">
                                 <div class="quiz-miniature miniature-img">
-                                    <img src="<?php echo html_entity_decode($otherquiz['quiz_picture']); ?>" alt="Miniature du voyage" class="travel-img">
+                                    <img src="<?php echo str_replace('&#039;', "'", $otherquiz['quiz_picture']); ?>" alt="Miniature du voyage" class="travel-img">
                                 </div>
-                                <h4><?php echo html_entity_decode($otherquiz['title']); ?></h4>
+                                <h4><?php echo str_replace('&#039;', "'", $otherquiz['title']); ?></h4>
                             </a>
                         <?php }?>
                     </div>

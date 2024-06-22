@@ -137,46 +137,8 @@ if (isset($_COOKIE['theme'])) {
         <?php require "Structure/Footer/footer.php"; ?>
     </div>
 </div>
-<script>
-    function checkImageSize(input, maxSizeInMB) {
-        if (input.files && input.files[0]) {
-            const fileSize = input.files[0].size;
-            const maxSize = maxSizeInMB * 1024 * 1024;
-
-            if (fileSize > maxSize) {
-                alert("La taille de l'image est trop grande. Veuillez choisir un fichier de taille inférieure à " + maxSizeInMB + " Mo.");
-                input.value = '';
-                return false;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = input.id === 'banner' ? document.getElementById('banner-preview') : document.getElementById('miniature-preview');
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function validateForm() {
-        const bannerInput = document.getElementById("banner");
-        const miniatureInput = document.getElementById("miniature");
-
-        if (bannerInput.files.length > 0 && bannerInput.files[0].size > 2 * 1024 * 1024) {
-            alert("La taille de la bannière est trop grande, merci de prendre une image de 2Mo maximum.");
-            return false;
-        }
-
-        if (miniatureInput.files.length > 0 && miniatureInput.files[0].size > 1 * 1024 * 1024) {
-            alert("La taille de la miniature est trop grande, merci de prendre une image de 1 Mo maximum.");
-            return false;
-        }
-
-        return true;
-    }
-</script>
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
+<script src="Structure/Functions/travel.js"></script>
 </body>
 </html>

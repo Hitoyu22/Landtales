@@ -128,7 +128,7 @@ if (isset($_COOKIE['theme'])) {
                 echo '<div class="col-12 col-md-2 mb-4">';
                 echo '<div class="custom-card p-3 d-flex flex-column align-items-center">';
                 echo '<div class="image-container mb-3" style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden;">';
-                echo '<img src="' . html_entity_decode($custom['picture']) . '" alt="Customisation Image" style="width: 100%; height: auto;">';
+                echo '<img src="' . str_replace('&#039;', "'", $custom['picture']) . '" alt="Customisation Image" style="width: 100%; height: auto;">';
                 echo '</div>';
                 echo '<p class="text-center">Prix : '. $custom['price'] .'</p>';
 
@@ -159,7 +159,7 @@ if (isset($_COOKIE['theme'])) {
                     <div class="modal-body">
                         Félicitations, voici la customisation que vous avez obtenu !
                         <?php if ($promoStatus === 'success' && $imageUrl): ?>
-                            <div><img src="<?php echo html_entity_decode($imageUrl); ?>" alt="Customisation Image" style="max-width: 100%;"></div>
+                            <div><img src="<?php echo str_replace('&#039;', "'", $imageUrl); ?>" alt="Customisation Image" style="max-width: 100%;"></div>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -189,15 +189,9 @@ if (isset($_COOKIE['theme'])) {
 <script src="Structure/Functions/script.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var promoStatus = "<?php echo $promoStatus; ?>";
-        if (promoStatus === 'success') {
-            new bootstrap.Modal(document.getElementById('promoSuccessModal')).show();
-        } else if (promoStatus === 'error' || promoStatus === 'already_purchased') {
-            new bootstrap.Modal(document.getElementById('promoErrorModal')).show();
-        }
-
-        if (window.history.replaceState && promoStatus) {
-            window.history.replaceState(null, null, window.location.pathname);
+        var promoStatusElement = "<?php echo $promoStatus; ?>";
+        if (promoStatusElement) {
+            showPromoModal(promoStatusElement);
         }
     });
 </script>

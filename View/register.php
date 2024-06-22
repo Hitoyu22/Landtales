@@ -4,6 +4,8 @@ $pageTitle = "Inscription";
 
 require "Includes/PHPMailerAutoload.php";
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 session_start();
 
 require "Structure/Bdd/config.php";
@@ -196,7 +198,7 @@ permaBan();
             <p class="text-danger font-weight-bold"><?php echo $errorConfirmPassword; ?></p>
 
             <h3 class="text-center text-white font-weight-bold">Interrogation surprise !</h3>
-            <label class="text-white font-weight-bold">Question : <?php echo html_entity_decode($question); ?></label>
+            <label class="text-white font-weight-bold">Question : <?php echo str_replace('&#039;', "'", $question); ?></label>
             <div class="form-group d-flex position-relative">
                 <i class="fas fa-check fa-lg mt-3"></i>
                 <input type="text" id="captcha" name="captcha" placeholder="Saisissez votre réponse" required autocomplete="off">
@@ -231,21 +233,6 @@ permaBan();
         </form>
     </div>
 </div>
-
-<script>
-    function togglePassword(targetId) {
-        var passwordField = document.getElementById(targetId);
-        var passwordToggleBtn = passwordField.nextElementSibling;
-
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            passwordToggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-        } else {
-            passwordField.type = "password";
-            passwordToggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-        }
-    }
-</script>
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
 </body>

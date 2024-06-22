@@ -1,5 +1,6 @@
 <?php
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 
 session_start();
     if (isset($_SESSION['idclient'])) {
@@ -69,9 +70,10 @@ session_start();
 
 function get_table($nom_table, $bdd){
 
-    $query = $bdd->query('SELECT id,pseudo,idrank,tempBan, permaBan FROM '.$nom_table);
-    // Définir le style de récupération à PDO::FETCH_ASSOC
-    $result = $query->fetchAll(PDO::FETCH_ASSOC);
+    $query = 'SELECT id, pseudo, idrank, tempBan, permaBan FROM ' . $nom_table;
+    $stmt = $bdd->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     return $result;
 }
@@ -139,7 +141,7 @@ function html_modify_popup($objet) {
                         <?php foreach ($tab_without_id as $key => $value) { ?>
                             <div class="form-group">
                                 <label for="input<?php echo $id . $key; ?>"><?php echo $key; ?></label>
-                                <input type="text" class="form-control" id="input<?php echo $id . $key; ?>" name="<?php echo $id . 'tab[' . $key . ']'; ?>" value="<?php echo html_entity_decode($value); ?>">
+                                <input type="text" class="form-control" id="input<?php echo $id . $key; ?>" name="<?php echo $id . 'tab[' . $key . ']'; ?>" value="<?php echo str_replace('&#039;', "'", $value); ?>">
                             </div>
                         <?php } ?>
                         <input type="hidden" name="update" value="modify">
@@ -179,20 +181,6 @@ function update_table($nom_table,$bdd){
 }
 function afficher_tableau($donnees, $nom_table,$bdd) {
     ?>
-    <style>
-        .table {
-            --bs-table-bg: transparent;
-        }
-        table.table-custom-alternative-row-color thead {
-            background-color: var(--actuel-bouton-couleur);
-        }
-        table.table-custom-alternative-row-color tbody tr:nth-of-type(2n+1) {
-            background-color: var(--actuel-footer-bas-couleur);
-        }
-        table.table-custom-alternative-row-color tbody tr:nth-of-type(2n) {
-            background-color: var(--actuel-barre-recherche-couleur);
-        }
-    </style>
     <div class="table-responsive">
         <table class="table table-bordered table-custom-alternative-row-color">
             <thead>
@@ -201,7 +189,7 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                 if (!empty($donnees) && is_array($donnees)) {
                     $head = tab_keys($donnees[0]);
                     foreach ($head as $column) {
-                        echo "<th scope='col'>".html_entity_decode($column)."</th>";
+                        echo "<th scope='col'>".str_replace('&#039;', "'", $column)."</th>";
                     }
                     echo "<th scope='col'>Modification</th>";
                 } else {
@@ -214,7 +202,7 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
             <?php
             if (!empty($donnees)) {
                 foreach ($donnees as $objet) {
-                    echo "<tr><th scope='row'>" . html_entity_decode($objet[$head[0]]) . "</th>";
+                    echo "<tr><th scope='row'>" . str_replace('&#039;', "'", $objet[$head[0]]) . "</th>";
                     $banned_keys = [$head[0]];
                     $tab2 = tab_without_first_index($banned_keys, $objet, true);
                     foreach ($tab2 as $key => $attribut) {
@@ -233,11 +221,11 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                                 default:
                                     $role = "Inconnu";
                             }
-                            echo "<td>" . html_entity_decode($role) . "</td>";
+                            echo "<td>" . str_replace('&#039;', "'", $role) . "</td>";
                         } else if ($key === 'tempBan') {
                             // Affichage de la date de bannissement ou "aucun" si null
                             $banValue = !is_null($attribut) ? formatFrenchDate($attribut) : "Aucun";
-                            echo "<td>" . html_entity_decode($banValue) . "</td>";
+                            echo "<td>" . str_replace('&#039;', "'", $banValue) . "</td>";
                         } else if ($key == 'permaBan') {
                             if ($attribut == 1) {
                                 echo "<td>Oui</td>";
@@ -246,14 +234,14 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                             }
                             $permaBan = $attribut;
                         } else {
-                            echo "<td>" . html_entity_decode($attribut) . "</td>";
+                            echo "<td>" . str_replace('&#039;', "'", $attribut) . "</td>";
                         }
                     }
                     $id = $objet[$head[0]];
 
                     echo "<td>";
                     if ($permaBan == 0) {
-                        echo "<button type='button' class='btn btn-primary' onclick='openModifyModal($id)'>Modifier</button>
+                        echo "<button type='button' class='btn btn-primary' onclick='openModifyModalUser($id)'>Modifier</button>
                   <button type='button' class='btn btn-warning' onclick='openTempBanModal($id)'>Bannir temporairement</button>
                   <button type='button' class='btn btn-danger' onclick='openPermBanModal($id)'>Bannir définitivement</button>";
                     }
@@ -280,32 +268,12 @@ if (isset($_COOKIE['theme'])) {
 ?>
 
 <link rel="stylesheet" href="../../Design/Css/style.css">
-<link rel="stylesheet" href="../Design/Css/home-admin.css">
-<style>
-    .popup-overlay{
-        position : fixed;
-        top:0;
-        left: 0;
-        right: 0;
-        bottom:0;
-        background: rgba(255,255,255,0.7);
-        z-index:100;
-        display:none;
-    }
-
-    .popup-overlay.openPopup{
-        display: block !important;
-    }
-
-</style>
 </head>
 <body class="hidden" data-bs-theme="<?php echo $theme; ?>">
 <?php require "Admin/Structures/Navbar/navbarAdmin.php";?>
 <div class="wrapper">
 
     <?php require "Admin/Structures/Sidebar/sidebarAdmin.php";?>
-
-
 
 
     <body data-bs-theme="light">
@@ -345,7 +313,6 @@ if (isset($_COOKIE['theme'])) {
                 </div>
             </div>
 
-            <!-- Modal for Temporary Ban -->
             <div class="modal fade" id="tempBanModal" tabindex="-1" aria-labelledby="tempBanModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -367,7 +334,6 @@ if (isset($_COOKIE['theme'])) {
                 </div>
             </div>
 
-            <!-- Modal for Permanent Ban -->
             <div class="modal fade" id="permBanModal" tabindex="-1" aria-labelledby="permBanModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -492,76 +458,10 @@ if (isset($_COOKIE['theme'])) {
         </div>
     </div>
 </div>
-<script>
-    function togglePopup($id){
-        let popup = document.querySelector($id);
-        popup.classList.toggle("openPopup");
-    }
-</script>
-<script>
-
-    async function openModifyModal(id) {
-        try {
-            const response = await fetch(`databaseTreatment.php?id=${id}&table=userRight`);
-            const data = await response.json();
-
-            document.getElementById('modifyId').value = id;
-
-            const modifyFormContent = document.getElementById('modifyFormContent');
-            modifyFormContent.innerHTML = '';
-
-            const selectDiv = document.createElement('div');
-            selectDiv.classList.add('form-group');
-            const selectLabel = document.createElement('label');
-            selectLabel.setAttribute('for', 'idrankSelect');
-            selectLabel.textContent = 'Rôle';
-            const select = document.createElement('select');
-            select.classList.add('form-control');
-            select.id = 'idrankSelect';
-            select.name = `${id}tab[idrank]`;
-
-            const roles = {
-                'Utilisateur': 1,
-                'Administrateur': 2,
-                'Modérateur': 3
-            };
-
-            for (const [role, value] of Object.entries(roles)) {
-                const option = document.createElement('option');
-                option.value = value;
-                option.textContent = role;
-                select.appendChild(option);
-            }
-
-            if (data.idrank) {
-                select.value = data.idrank;
-            }
-
-            selectDiv.appendChild(selectLabel);
-            selectDiv.appendChild(select);
-            modifyFormContent.appendChild(selectDiv);
-
-            const modifyModal = new bootstrap.Modal(document.getElementById('modifyModal'));
-            modifyModal.show();
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-
-    function openTempBanModal(id) {
-        document.getElementById('tempBanId').value = id;
-        const tempBanModal = new bootstrap.Modal(document.getElementById('tempBanModal'));
-        tempBanModal.show();
-    }
-
-    function openPermBanModal(id) {
-        document.getElementById('permBanId').value = id;
-        const permBanModal = new bootstrap.Modal(document.getElementById('permBanModal'));
-        permBanModal.show();
-    }
-</script>
 <script src="../Structure/Functions/bootstrap.js"></script>
 <script src="../Structure/Functions/script.js"></script>
+<script src="Structures/Functions/admin.js"></script>
+
 </body>
 
 </html>

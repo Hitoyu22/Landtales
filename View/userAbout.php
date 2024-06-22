@@ -63,7 +63,7 @@ require "friendRequest.php";
             $customImageUrl = $custom['picture'];
         }
 
-    $numberOfFollowersQuery = $bdd->prepare('SELECT COUNT(*) AS num_followers FROM follower WHERE idclientfollowed = ?');
+    $numberOfFollowersQuery = $bdd->prepare('SELECT COUNT(idclientfollowed) AS num_followers FROM follower WHERE idclientfollowed = ?');
     $numberOfFollowersQuery->execute([$userId]);
     $numberOfFollowers = $numberOfFollowersQuery->fetchColumn();
 

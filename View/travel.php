@@ -32,16 +32,16 @@ if(isset($_SESSION['idclient'])) {
         }
 
         //Calcul du nombre de like déjà existant pour ce voyage.
-        $countLikes = $bdd->prepare("SELECT COUNT(*) AS likeCount FROM travel_like WHERE idtravel = ?");
+        $countLikes = $bdd->prepare("SELECT COUNT(idtravel) AS likeCount FROM travel_like WHERE idtravel = ?");
         $countLikes->execute([$travelId]);
         $likeCount = $countLikes->fetch(PDO::FETCH_ASSOC)['likeCount'];
 
-        $checkLikeQuery = $bdd->prepare("SELECT COUNT(*) AS isLiked FROM travel_like WHERE idclient = ? AND idtravel = ?");
+        $checkLikeQuery = $bdd->prepare("SELECT COUNT(idclient) AS isLiked FROM travel_like WHERE idclient = ? AND idtravel = ?");
         $checkLikeQuery->execute([$userId, $travelId]);
         $isLiked = $checkLikeQuery->fetch(PDO::FETCH_ASSOC)['isLiked'] > 0;
 
         // Vérification des vues sur le voyage, si l'utilisateur a déjà vu le voyage aujourd'hui, nous n'ajoutons pas de nouvelle vue.
-        $checkViewUser = $bdd->prepare("SELECT COUNT(*) AS viewCount FROM travel_view WHERE idtravel = ? AND idclient = ? AND DATE(travel_view_date) = CURDATE()");
+        $checkViewUser = $bdd->prepare("SELECT COUNT(idtravel) AS viewCount FROM travel_view WHERE idtravel = ? AND idclient = ? AND DATE(travel_view_date) = CURDATE()");
         $checkViewUser->execute([$travelId, $userId]);
         $viewCount = $checkViewUser->fetch(PDO::FETCH_ASSOC)['viewCount'];
 
@@ -51,7 +51,7 @@ if(isset($_SESSION['idclient'])) {
         }
 
         //Calcul du nombre de vues pour le voyage après ajout potentiel
-        $travelView = $bdd->prepare("SELECT COUNT(*) AS viewCount FROM travel_view WHERE idtravel = ?");
+        $travelView = $bdd->prepare("SELECT COUNT(idtravel) AS viewCount FROM travel_view WHERE idtravel = ?");
         $travelView->execute([$travelId]);
         $totalView = $travelView->fetch(PDO::FETCH_ASSOC)['viewCount'];
 
@@ -114,7 +114,7 @@ if(isset($_SESSION['idclient'])) {
 
             deleteTravel($bdd,$travelIdToDelete);
 
-            $titleTravel = html_entity_decode($title);
+            $titleTravel = str_replace('&#039;', "'", $title);
 
             $html = <<<HTML
                 <!DOCTYPE html>
@@ -228,7 +228,7 @@ if (isset($_COOKIE['theme'])) {
         </div>
         <div class="mt-5">
             <div class="container">
-                <h1 class="text-center ml-0"><?php echo html_entity_decode($title); ?></h1>
+                <h1 class="text-center ml-0"><?php echo str_replace('&#039;', "'", $title); ?></h1>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div class="d-flex align-items-center">
                         <div>
@@ -248,7 +248,7 @@ if (isset($_COOKIE['theme'])) {
                     - Raconté le <?php echo formatFrenchDate($date); ?>
                 </p>
                 <div class="d-flex">
-                    <button id="likeButton" onclick="handleLikeClick()" onmousedown="hideFocusBorder(this)" type="button" data-is-liked="<?php echo $isLiked ? '1' : '0'; ?>">
+                    <button id="likeButton" onclick="handleLikeClick('<?php echo $travelId; ?>', '<?php echo $userId; ?>')" onmousedown="hideFocusBorder(this)" type="button" data-is-liked="<?php echo $isLiked ? '1' : '0'; ?>">
                         <span class="material-symbols-outlined mr-2">favorite</span>
                     </button>
                     <div class="like-count"><?php echo $likeCount; ?></div>
@@ -299,7 +299,7 @@ if (isset($_COOKIE['theme'])) {
                         echo "<p class='mt-2'>" . $comment['pseudo'] . " - " . $date_formattee . "</p>";
                         echo "</div>";
                         echo "<div class='col-12'>";
-                        echo "<p class='w-100 limited-text'>" . html_entity_decode($comment['comment']) . "</p>";
+                        echo "<p class='w-100 limited-text'>" . $comment['comment'] . "</p>";
                         echo "</div>";
                         echo "</div>";
 
@@ -320,7 +320,7 @@ if (isset($_COOKIE['theme'])) {
                         echo "</form>";
 
                         // Bouton pour afficher les réponses
-                        echo "<button class='btn' id='repliesButton" . $comment['id'] . "' onclick='showReplies(" . $comment['id'] . ")'>Afficher les réponses</button>";
+                        echo "<button class='btn' id='repliesButton" . $comment['id'] . "' onclick=\"showReplies('" . $comment['id'] . "', '" . $_SESSION['idclient'] . "', '" . $idCreator . "', '" . $_SESSION['rank'] . "')\">Afficher les réponses</button>";
 
                         // Formulaire pour la suppression du commentaire (affiché seulement pour l'utilisateur ou l'administrateur)
                         if ($_SESSION['idclient'] == $idCreator || $_SESSION['rank'] == 3) {
@@ -346,143 +346,6 @@ if (isset($_COOKIE['theme'])) {
     </div>
 
 </div>
-<script>
-
-    function confirmDelete() {
-
-        var reason = prompt("Veuillez saisir la raison de la suppression du voyage :");
-
-        if (reason !== null && reason !== "") {
-            fetch(window.location.href, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'delete_reason=' + encodeURIComponent(reason),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erreur lors de la suppression du voyage');
-                    }
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('Erreur :', error);
-                });
-        } else {
-            alert("Veuillez saisir une raison valide.");
-        }
-    }
-
-
-    function showReplyForm(commentId) {
-        const replyForm = document.getElementById('replyForm' + commentId);
-        replyForm.classList.toggle('d-none');
-    }
-
-    function toggleSubmitButton() {
-        var commentInput = document.querySelector("textarea[name='commentaire']");
-        var submitButton = document.querySelector("button[name='Envoyer']");
-
-        if (commentInput.value.trim() !== "") {
-            submitButton.classList.remove("d-none");
-        } else {
-            submitButton.classList.add("d-none");
-        }
-    }
-    function showReplies(commentId) {
-        const repliesDiv = document.getElementById('replies' + commentId);
-        const repliesButton = document.getElementById('repliesButton' + commentId);
-
-        if (repliesDiv) {
-            if (repliesDiv.classList.contains('d-none')) {
-                let idSession = "<?php echo $_SESSION['idclient']; ?>";
-                let idCreator = "<?php echo $idCreator; ?>";
-                let rank = "<?php echo $_SESSION['rank']; ?>";
-
-                let url = `Includes/getComments.php?commentId=${commentId}&idSession=${idSession}&idCreator=${idCreator}&rank=${rank}`;
-
-                fetch(url)
-                    .then(response => response.text())
-                    .then(data => {
-                        repliesDiv.innerHTML = data;
-                        repliesDiv.classList.remove('d-none');
-                        toggleRepliesButton(commentId);
-                    })
-                    .catch(error => console.error('Erreur lors du chargement des réponses :', error));
-            } else {
-                repliesDiv.classList.add('d-none');
-                toggleRepliesButton(commentId);
-            }
-        } else {
-            console.error('Element with ID "replies' + commentId + '" not found.');
-        }
-    }
-
-    function toggleRepliesButton(commentId) {
-        const repliesButton = document.getElementById('repliesButton' + commentId);
-
-        if (repliesButton) {
-            if (repliesButton.textContent.trim() === 'Afficher les réponses') {
-                repliesButton.textContent = 'Masquer les réponses';
-            } else {
-                repliesButton.textContent = 'Afficher les réponses';
-            }
-        } else {
-            console.error('Element with ID "repliesButton' + commentId + '" not found.');
-        }
-    }
-
-
-
-    function handleLikeClick() {
-        var likeButton = document.getElementById('likeButton');
-        var likeCountElement = document.querySelector('.like-count');
-
-        // Obtient l'état actuel du like
-        var isLiked = likeButton.getAttribute('data-is-liked') === '1';
-
-        var travelId = "<?php echo $travelId; ?>";
-        var userId = "<?php echo $userId; ?>";
-
-        fetch('Includes/likesTreatment.php?travelId=' + encodeURIComponent(travelId) + '&userId=' + encodeURIComponent(userId), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    // Met à jour l'état du like et le nombre de likes en conséquence
-                    if (isLiked) {
-                        likeButton.setAttribute('data-is-liked', '0');
-                        likeButton.querySelector('.material-symbols-outlined').textContent = 'favorite_border';
-                        likeCountElement.textContent = parseInt(likeCountElement.textContent) - 1; // Diminue le nombre de likes de 1
-                    } else {
-                        likeButton.setAttribute('data-is-liked', '1');
-                        likeButton.querySelector('.material-symbols-outlined').textContent = 'favorite';
-                        likeCountElement.textContent = parseInt(likeCountElement.textContent) + 1; // Augmente le nombre de likes de 1
-                    }
-                } else {
-                    console.error('Erreur : ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erreur lors de la récupération des données:', error);
-            });
-    }
-
-
-
-
-</script>
-
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
 <script src="Structure/Functions/travel.js"></script>

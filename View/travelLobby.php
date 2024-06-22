@@ -2,6 +2,10 @@
 session_start();
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/travelAlgo.php";
+require "Structure/Functions/alerts.php";
+
+
 
 if (!isset($_SESSION['idclient'])) {
     header("Location: login.php");
@@ -25,44 +29,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         unset($_POST['theme']);
     }
 
+    function fetchTravels($bdd, $orderBy) {
+        $query = "
+        SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
+        FROM travel t
+        LEFT JOIN client c ON t.idclient = c.id
+        LEFT JOIN travel_view tv ON t.id = tv.idtravel
+        WHERE t.travel_status = 1 AND t.visibility = 1
+        GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
+        ORDER BY $orderBy
+    ";
+
+        $stmt = $bdd->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     if (isset($_POST['popular'])) {
-        $query = "
-                SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
-                FROM travel t
-                LEFT JOIN client c ON t.idclient = c.id
-                LEFT JOIN travel_view tv ON t.id = tv.idtravel
-                WHERE t.travel_status = 1 AND t.visibility = 1
-                GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
-                ORDER BY view_count DESC
-            ";
-        $travels = $bdd->query($query)->fetchAll();
-
-
+        $travels = fetchTravels($bdd, 'view_count DESC');
     } elseif (isset($_POST['young'])) {
-        $query = "
-                SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
-                FROM travel t
-                LEFT JOIN client c ON t.idclient = c.id
-                LEFT JOIN travel_view tv ON t.id = tv.idtravel
-                WHERE t.travel_status = 1 AND t.visibility = 1
-                GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
-                ORDER BY t.travel_date DESC
-            ";
-        $travels = $bdd->query($query)->fetchAll();
-
-
+        $travels = fetchTravels($bdd, 't.travel_date DESC');
     } elseif (isset($_POST['old'])) {
-        $query = "
-            SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count
-            FROM travel t
-            LEFT JOIN client c ON t.idclient = c.id
-            LEFT JOIN travel_view tv ON t.id = tv.idtravel
-            WHERE t.travel_status = 1 AND t.visibility = 1
-            GROUP BY t.id, t.miniature, t.title, t.idclient, c.pseudo
-            ORDER BY t.travel_date ASC
-        ";
-        $travels = $bdd->query($query)->fetchAll();
-
+        $travels = fetchTravels($bdd, 't.travel_date ASC');
     } else if (isset($_POST['theme']) && !empty($_POST['theme'])) {
             $query = "
             SELECT t.id, t.miniature, t.title, t.idclient, c.pseudo AS creator_name, COUNT(tv.idtravel) AS view_count

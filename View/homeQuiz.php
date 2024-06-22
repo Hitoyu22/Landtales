@@ -81,10 +81,10 @@ $theme = $_COOKIE['theme'] ?? 'light';
                     <div class="col-md">
                         <div class="column">
                             <div class="col-md d-flex flex-column text-start" >
-                                <h1 id="quiztitle" class="ml-0"><?php echo html_entity_decode($quizInfo['title']); ?></h1>
+                                <h1 id="quiztitle" class="ml-0"><?php echo str_replace('&#039;', "'", $quizInfo['title']); ?></h1>
                                 <h3 class="mainquiz">Difficulté : <?php for ($i = 0; $i < $quizInfo['difficulty_level']; $i++){ echo "★"; } ?></h3>
-                                <h3 class="mainquiz">Pièces maximales obtenables : <?php echo html_entity_decode($quizInfo['potential_gain']); ?></h3>
-                                <h3 class="mainquiz">Univers : <?php echo html_entity_decode($quizInfo['universe']); ?></h3>
+                                <h3 class="mainquiz">Pièces maximales obtenables : <?php echo str_replace('&#039;', "'", $quizInfo['potential_gain']); ?></h3>
+                                <h3 class="mainquiz">Univers : <?php echo str_replace('&#039;', "'", $quizInfo['universe']); ?></h3>
                             </div>
                             <div class="col-md text-center mt-3 " id="btnquizdiv">
                                 <button type="button" class="btn btn-light btnequiz mb-5" <?php echo $buttonDisabled; ?> onclick="window.location.href='<?php echo $buttonLink; ?>'" role="button"><?php echo $buttonText; ?></button>
@@ -93,13 +93,13 @@ $theme = $_COOKIE['theme'] ?? 'light';
                     </div>
                 </div>
                 <div class="row text-start">
-                    <p id="desc"><?php echo html_entity_decode($quizInfo['summary']); ?></p>
+                    <p id="desc"><?php echo str_replace('&#039;', "'", $quizInfo['summary']); ?></p>
                 </div>
 
                 <?php
                 if ($_SESSION["rank"] === 3) {
                     echo '
-            <button type="button" name="delete_quiz" class="btn btn-danger" onclick="confirmDelete()">Supprimer le quiz</button>
+            <button type="button" name="delete_quiz" class="btn btn-danger mb-5" onclick="confirmDelete()">Supprimer le quiz</button>
             ';
                 }
                 ?>
@@ -111,28 +111,8 @@ $theme = $_COOKIE['theme'] ?? 'light';
         <?php require "Structure/Footer/footer.php"; ?>
     </div>
 </div>
-<script>
-    function confirmDelete() {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce quiz ?')) {
-            var form = document.createElement('form');
-            form.method = 'post';
-            form.action = '';
-            form.style.display = 'none';
-
-            var inputAction = document.createElement('input');
-            inputAction.type = 'hidden';
-            inputAction.name = 'action';
-            inputAction.value = 'delete_quiz';
-
-            form.appendChild(inputAction);
-
-            document.body.appendChild(form);
-
-            form.submit();
-        }
-    }
-</script>
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
+<script src="Structure/Functions/quiz.js"></script>
 </body>
 </html>

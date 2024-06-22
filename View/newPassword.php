@@ -75,7 +75,7 @@ if (isset($_GET['iduser']) && !empty($_GET['iduser']) && isset($_GET['account_ve
     header("Location: Error/Erreur404.php");
 }
 
-require "tructure/Head/head.php";
+require "Structure/Head/head.php";
 ?>
 
 <link rel="stylesheet" href="Design/Css/login.css">
@@ -123,19 +123,6 @@ require "tructure/Head/head.php";
         </form>
     </div>
 </div>
-<script>
-    function togglePassword(targetId) {
-        var passwordField = document.getElementById(targetId);
-        var passwordToggleBtn = passwordField.nextElementSibling;
-
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            passwordToggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-        } else {
-            passwordField.type = "password";
-            passwordToggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-        }
-    }
-</script>
+<script src="Structure/Functions/script.js"></script>
 </body>
 </html>

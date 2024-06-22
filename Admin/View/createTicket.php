@@ -160,81 +160,6 @@ if (isset($_COOKIE['theme'])) {
     </div>
 </div>
 
-
-<script>
-    const dt = new DataTransfer();
-    const MAX_SIZE = 2 * 1024 * 1024;
-
-    document.getElementById('attachment').addEventListener('change', function(e) {
-        let totalSize = 0;
-
-        for (let file of dt.files) {
-            totalSize += file.size;
-        }
-
-        for (let file of this.files) {
-            if (totalSize + file.size > MAX_SIZE) {
-                alert('La taille totale des fichiers dépasse 2 Mo.');
-                return;
-            }
-
-            totalSize += file.size;
-
-            let fileBloc = document.createElement('span');
-            fileBloc.classList.add('file-block');
-
-            let fileName = document.createElement('span');
-            fileName.classList.add('name');
-            fileName.textContent = file.name;
-
-            let br = document.createElement('br');
-
-            let fileDelete = document.createElement('span');
-            fileDelete.classList.add('file-delete');
-
-            let deleteBtn = document.createElement('button');
-            deleteBtn.classList.add('btn', 'btn-danger');
-            deleteBtn.textContent = '-';
-            deleteBtn.addEventListener('click', function() {
-                let name = this.parentElement.nextElementSibling.textContent;
-                this.parentElement.parentElement.remove();
-
-                for (let i = 0; i < dt.items.length; i++) {
-                    if (name === dt.items[i].getAsFile().name) {
-                        dt.items.remove(i);
-                        break;
-                    }
-                }
-
-                document.getElementById('attachment').files = dt.files;
-                let totalSize = 0;
-                for (let file of dt.files) {
-                    totalSize += file.size;
-                }
-
-                document.getElementById('total-size').textContent = `Taille totale : ${(totalSize / 1024).toFixed(2)} Mo`;
-
-                if (totalSize > MAX_SIZE) {
-                    alert('La taille totale des fichiers dépasse 2 Mo.');
-                }
-            });
-
-            fileDelete.appendChild(deleteBtn);
-            fileBloc.appendChild(fileDelete);
-            fileBloc.appendChild(document.createTextNode('\u00A0\u00A0')); // Ajout d'espaces entre le bouton et le nom du fichier
-            fileBloc.appendChild(fileName);
-            fileBloc.appendChild(br);
-
-            document.getElementById('files-names').appendChild(fileBloc);
-
-            dt.items.add(file);
-        }
-
-        this.files = dt.files;
-
-        document.getElementById('total-size').textContent = `Taille totale : ${(totalSize / 1024 / 1024).toFixed(2)} Mo`;
-    });
-</script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script>
@@ -260,6 +185,8 @@ if (isset($_COOKIE['theme'])) {
 
 <script src="../Structure/Functions/bootstrap.js"></script>
 <script src="../Structure/Functions/script.js"></script>
+<script src="Structures/Functions/ticket.js"></script>
+
 </body>
 </html>
 

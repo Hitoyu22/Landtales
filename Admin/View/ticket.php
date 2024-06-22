@@ -1,5 +1,7 @@
 <?php
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 session_start();
 
 if (isset($_SESSION['idclient'])) {
@@ -280,125 +282,11 @@ if (isset($_COOKIE['theme'])) {
 <script>
     initializeEditorTicket(true, <?php echo $summary ?>);
 </script>
-<script>
-    // Fonction pour effacer le canvas
-    function clearCanvas() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Fonction pour obtenir les coordonnées du canvas lors d'un événement de souris
-    function getCanvasCoordinates(event) {
-        var canvasRect = canvas.getBoundingClientRect();
-        return {
-            x: event.clientX - canvasRect.left,
-            y: event.clientY - canvasRect.top
-        };
-    }
-
-    // Fonction pour obtenir les coordonnées du canvas lors d'un événement tactile
-    function getCanvasCoordinatesTouch(event) {
-        var canvasRect = canvas.getBoundingClientRect();
-        return {
-            x: event.touches[0].clientX - canvasRect.left,
-            y: event.touches[0].clientY - canvasRect.top
-        };
-    }
-
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    var isDrawing = true;
-
-    canvas.addEventListener('mousedown', function(e) {
-        if (isDrawing) {
-            var coordinates = getCanvasCoordinates(e);
-            context.beginPath();
-            context.moveTo(coordinates.x, coordinates.y);
-            canvas.addEventListener('mousemove', draw);
-            e.preventDefault();
-        }
-    });
-
-    canvas.addEventListener('mouseup', function() {
-        canvas.removeEventListener('mousemove', draw);
-    });
-
-    function draw(e) {
-        if (isDrawing) {
-            var coordinates = getCanvasCoordinates(e);
-            context.lineTo(coordinates.x, coordinates.y);
-            context.stroke();
-        }
-    }
-
-    canvas.addEventListener('touchstart', function(e) {
-        if (isDrawing) {
-            var coordinates = getCanvasCoordinatesTouch(e);
-            context.beginPath();
-            context.moveTo(coordinates.x, coordinates.y);
-            canvas.addEventListener('touchmove', drawTouch);
-            e.preventDefault();
-        }
-    });
-
-    canvas.addEventListener('touchend', function() {
-        canvas.removeEventListener('touchmove', drawTouch);
-    });
-
-    function drawTouch(e) {
-        if (isDrawing) {
-            var coordinates = getCanvasCoordinatesTouch(e);
-            context.lineTo(coordinates.x, coordinates.y);
-            context.stroke();
-        }
-    }
-
-    var signatureModal = document.getElementById('signatureModal');
-    if (signatureModal) {
-        signatureModal.addEventListener('hidden.bs.modal', function() {
-            clearCanvas();
-        });
-    }
-
-    var clearBtn = document.getElementById('clearCanvasBtn');
-    if (clearBtn) {
-        clearBtn.addEventListener('click', function() {
-            clearCanvas();
-        });
-    }
-
-    var saveSignatureBtn = document.getElementById('saveSignatureBtn');
-    if (saveSignatureBtn) {
-        saveSignatureBtn.addEventListener('click', function(event) {
-            event.preventDefault(); // Empêche le formulaire de se soumettre automatiquement
-
-            var imageData = canvas.toDataURL('image/png'); // Conversion du canvas en base64 PNG
-
-            // Création du formulaire
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = ''; // Laissez vide pour envoyer à la même page
-
-            // Création de l'input pour l'image
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'sign'; // Assurez-vous que le nom correspond à celui attendu dans le script PHP
-            input.value = imageData;
-
-            // Ajout de l'input au formulaire
-            form.appendChild(input);
-
-            // Ajout du formulaire à la page
-            document.body.appendChild(form);
-
-            // Soumission du formulaire
-            form.submit();
-        });
-    }
-
-</script>
-
 
 <script src="../Structure/Functions/bootstrap.js"></script>
 <script src="../Structure/Functions/script.js"></script>
+<script src="Structures/Functions/ticket.js"></script>
+<script src="Structures/Functions/admin.js"></script>
+
 </body>
 </html>

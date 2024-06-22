@@ -19,7 +19,7 @@ if (isset($_GET['keyword']) && isset($_GET['table'])) {
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $suggestions[] = array(
                     'url' => $link . $row['id'],
-                    'title' => html_entity_decode($row[$column])
+                    'title' => str_replace('&#039;', "'", $row[$column])
                 );
             }
             break;
@@ -33,7 +33,7 @@ if (isset($_GET['keyword']) && isset($_GET['table'])) {
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $suggestions[] = array(
                     'url' => $link . $row['id'],
-                    'title' => html_entity_decode($row[$column])
+                    'title' => str_replace('&#039;', "'", $row[$column])
                 );
             }
             break;
@@ -47,7 +47,7 @@ if (isset($_GET['keyword']) && isset($_GET['table'])) {
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
                 $suggestions[] = array(
                     'url' => $link . $row['id'],
-                    'title' => html_entity_decode($row[$column])
+                    'title' => str_replace('&#039;', "'", $row[$column])
                 );
             }
             break;

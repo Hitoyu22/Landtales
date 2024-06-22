@@ -86,34 +86,7 @@ if (isset($_COOKIE['theme'])) {
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
 <script>
-    let messageArea = document.getElementById("messageArea");
-
-    function scrollToBottom() {
-        messageArea.scrollTop = messageArea.scrollHeight;
-    }
-
-
-    window.onload = scrollToBottom;
-
-    setInterval(function() {
-        fetch("Includes/loadMessages.php?id=<?php echo $idFriend; ?>")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erreur lors du chargement des messages');
-                }
-                return response.text();
-            })
-            .then(data => {
-                let shouldScrollToBottom = messageArea.scrollTop + messageArea.clientHeight === messageArea.scrollHeight;
-                messageArea.innerHTML = data;
-                if (shouldScrollToBottom) {
-                    scrollToBottom();
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, 500);
+    loadMessages("<?php echo $idFriend; ?>");
 </script>
 </body>
 </html>

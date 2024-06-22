@@ -30,7 +30,7 @@ if (isset($_GET['commentId'])) {
             echo "<div class='col-12 ml-3'>";
             echo "<p class='col-12 ml-5 mt-2'>" . $reply['pseudo'] . " - " . $date_formattee_reply . "</p>";
             echo "<div class='col-10'>";
-            echo "<p>" . html_entity_decode($reply['comment']) . "</p>";
+            echo "<p>" . str_replace('&#039;', "'", $reply['comment']) . "</p>";
             echo "</div>";
 
             if ($idSession == $idCreator || $rank == 3) {

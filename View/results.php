@@ -27,7 +27,7 @@ if ($quizId) {
     }
 }
 
-$numberQuestionsQuery = $bdd->prepare("SELECT COUNT(*) FROM question WHERE idquiz = ?");
+$numberQuestionsQuery = $bdd->prepare("SELECT COUNT(idquiz) FROM question WHERE idquiz = ?");
 $numberQuestionsQuery->execute([$quizId]);
 $number = $numberQuestionsQuery->fetchColumn();
 

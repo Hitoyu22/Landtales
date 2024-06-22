@@ -42,6 +42,7 @@
   r.style.setProperty("--actuel-element-back-hoover-couleur", ebhc);
 }*/
 
+//Menu burger
 const hamBurger = document.querySelector(".toggle-btn");
 
 hamBurger.addEventListener("click", function () {
@@ -53,6 +54,7 @@ function hideFocusBorder(button) {
   button.style.outline = 'none';
 }
 
+// Changer le thème
 function applyTheme(theme) {
   var r = document.querySelector(":root");
   var rs = getComputedStyle(r);
@@ -68,7 +70,6 @@ function applyTheme(theme) {
     r.style.setProperty("--actuel-" + suffix, propValue);
   });
 
-  // Update SVG colors immediately
   updateSVGColor();
 }
 
@@ -111,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }, 500);
 });
 
-
+// Affiche searchbar sur mobile
 
 const loupeSearchLink = document.querySelector('.loupe-search-link');
 const fullscreenSearch = document.getElementById('fullscreen-search');
@@ -135,4 +136,121 @@ window.addEventListener('pageshow', function(event) {
   }
 });
 
+
+// Afficher/Masquer le mot de passe
+function togglePassword(targetId) {
+  var passwordField = document.getElementById(targetId);
+  var passwordToggleBtn = passwordField.nextElementSibling;
+
+  if (passwordField.type === "password") {
+    passwordField.type = "text";
+    passwordToggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
+  } else {
+    passwordField.type = "password";
+    passwordToggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
+  }
+}
+
+
+// Taille image
+function validateImage(event, elementId, maxSizeMB) {
+  const fileInput = event.target;
+  const file = fileInput.files[0];
+  const previewImage = document.getElementById(elementId);
+
+  if (file) {
+    const fileSizeMB = file.size / 1024 / 1024;
+    const fileType = file.type;
+
+    if (fileSizeMB > maxSizeMB) {
+      alert(`Le fichier dépasse la taille maximale de ${maxSizeMB} Mo.`);
+      clearFileInput(fileInput, previewImage);
+      return;
+    }
+
+    if (!['image/jpeg', 'image/jpg'].includes(fileType)) {
+      alert("Seuls les formats JPG et JPEG sont autorisés.");
+      clearFileInput(fileInput, previewImage);
+      return;
+    }
+
+    displaySelectedImage(event, elementId);
+  }
+}
+
+function clearFileInput(fileInput, previewImage) {
+  fileInput.value = '';
+  previewImage.src = previewImage.getAttribute('data-initial-src');
+}
+
+function displaySelectedImage(event, elementId) {
+  const selectedImage = document.getElementById(elementId);
+  const fileInput = event.target;
+
+  if (fileInput.files && fileInput.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      selectedImage.src = e.target.result;
+    };
+
+    reader.readAsDataURL(fileInput.files[0]);
+  }
+}
+
+//Customisation
+function showPromoModal(promoStatus) {
+  if (promoStatus === 'success') {
+    new bootstrap.Modal(document.getElementById('promoSuccessModal')).show();
+  } else if (promoStatus === 'error' || promoStatus === 'already_purchased') {
+    new bootstrap.Modal(document.getElementById('promoErrorModal')).show();
+  }
+
+  if (window.history.replaceState && promoStatus) {
+    window.history.replaceState(null, null, window.location.pathname);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var promoStatusElement = document.getElementById('promoStatus');
+  if (promoStatusElement) {
+    showPromoModal(promoStatusElement.value);
+  }
+});
+
+// Messagerie
+function loadMessages(idFriend) {
+  let messageArea = document.getElementById("messageArea");
+
+  function scrollToBottom() {
+    messageArea.scrollTop = messageArea.scrollHeight;
+  }
+
+  window.onload = scrollToBottom;
+
+  setInterval(function() {
+    fetch("Includes/loadMessages.php?id=" + idFriend)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors du chargement des messages');
+          }
+          return response.text();
+        })
+        .then(data => {
+          let shouldScrollToBottom = messageArea.scrollTop + messageArea.clientHeight === messageArea.scrollHeight;
+          messageArea.innerHTML = data;
+          if (shouldScrollToBottom) {
+            scrollToBottom();
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+  }, 500);
+}
+
+// Page d'erreur
+function goBack() {
+  window.history.back();
+}
 

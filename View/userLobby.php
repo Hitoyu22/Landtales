@@ -2,6 +2,8 @@
 session_start();
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 
 if (!isset($_SESSION['idclient'])) {
     header("Location: login.php");
@@ -17,7 +19,12 @@ checkUserRole();
 
 // Pagination
 $usersPerPage = 15;
-$totalUsers = $bdd->query('SELECT COUNT(*) FROM client WHERE visibility = 1 AND idrank != 2 AND permaBan != 1')->fetchColumn();
+$query = 'SELECT COUNT(id) FROM client WHERE visibility = 1 AND idrank != 2 AND permaBan != 1';
+$stmt = $bdd->prepare($query);
+$stmt->execute();
+$totalUsers = $stmt->fetchColumn();
+
+$usersPerPage = 10;
 $totalPages = ceil($totalUsers / $usersPerPage);
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -30,7 +37,7 @@ if ($page < 1 || $page > $totalPages) {
 
 $offset = ($page - 1) * $usersPerPage;
 
-$publicUserProfile = $bdd->prepare('SELECT * FROM client WHERE visibility = 1 AND idrank != 2 AND permaBan != 1 LIMIT :offset, :limit');
+$publicUserProfile = $bdd->prepare('SELECT id, pseudo, profil_picture FROM client WHERE visibility = 1 AND idrank != 2 AND permaBan != 1 LIMIT :offset, :limit');
 $publicUserProfile->bindParam(':offset', $offset, PDO::PARAM_INT);
 $publicUserProfile->bindParam(':limit', $usersPerPage, PDO::PARAM_INT);
 $publicUserProfile->execute();

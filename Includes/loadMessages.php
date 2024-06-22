@@ -38,15 +38,13 @@ if(isset($_GET['id'])) {
         // Ajouter le message au HTML
         $html .= '<div class="d-flex justify-content-' . ($message['idclientfollower'] == $userId ? 'end' : 'start') . ' mb-2">';
         $html .= '<div class="' . ($message['idclientfollower'] == $userId ? 'bg-primary' : 'bg-success') . ' text-white rounded px-3 py-1" style="max-width: 70%;">';
-        $html .= '<p class="mb-0">' . html_entity_decode($decryptedMessage) . '</p>';
+        $html .= '<p class="mb-0">' . str_replace('&#039;', "'", $decryptedMessage) . '</p>';
         $html .= '</div>';
         $html .= '</div>';
     }
 
-    // Renvoyer le HTML des messages
     echo $html;
 } else {
-    // Si l'identifiant de l'ami n'est pas passé en paramètre GET, renvoyer une erreur
     echo "Erreur: Identifiant de l'ami manquant.";
 }
 ?>

@@ -4,6 +4,7 @@ session_start();
 $pageTitle = "Paramètres - Customisation";
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 
 if(isset($_SESSION['idclient'])) {
     $userId = $_SESSION['idclient'];
@@ -39,7 +40,7 @@ if(isset($_SESSION['idclient'])) {
                 $filePath = $profileUploadDir . '/' . $fileName;
                 move_uploaded_file($_FILES['iconProfil']['tmp_name'], $filePath);
                 $updateIcon = $bdd->prepare("UPDATE client SET profil_picture = ? WHERE id = ?");
-                $updateIcon->execute(['http://localhost/' . $filePath, $userId]);
+                $updateIcon->execute(['https://landtales.freeddns.org/' . $filePath, $userId]);
             }
 
             // Vérifier si une nouvelle bannière a été téléchargée
@@ -57,7 +58,7 @@ if(isset($_SESSION['idclient'])) {
                 $filePath = $bannerUploadDir . '/' . $fileName;
                 move_uploaded_file($_FILES['bannerProfil']['tmp_name'], $filePath);
                 $updateBanner = $bdd->prepare("UPDATE client SET banner = ? WHERE id = ?");
-                $updateBanner->execute(['http://localhost/' . $filePath, $userId]);
+                $updateBanner->execute(['https://landtales.freeddns.org/' . $filePath, $userId]);
             }
         }
 
@@ -237,53 +238,6 @@ if (isset($_COOKIE['theme'])) {
         <?php require "Structure/Footer/footer.php";?>
     </div>
 </div>
-
-<script>
-    function validateImage(event, elementId, maxSizeMB) {
-        const fileInput = event.target;
-        const file = fileInput.files[0];
-        const previewImage = document.getElementById(elementId);
-
-        if (file) {
-            const fileSizeMB = file.size / 1024 / 1024;
-            const fileType = file.type;
-
-            if (fileSizeMB > maxSizeMB) {
-                alert(`Le fichier dépasse la taille maximale de ${maxSizeMB} Mo.`);
-                clearFileInput(fileInput, previewImage);
-                return;
-            }
-
-            if (!['image/jpeg', 'image/jpg'].includes(fileType)) {
-                alert("Seuls les formats JPG et JPEG sont autorisés.");
-                clearFileInput(fileInput, previewImage);
-                return;
-            }
-
-            displaySelectedImage(event, elementId);
-        }
-    }
-
-    function clearFileInput(fileInput, previewImage) {
-        fileInput.value = ''; // Clear the file input
-        previewImage.src = previewImage.getAttribute('data-initial-src'); // Restore the initial image
-    }
-
-    function displaySelectedImage(event, elementId) {
-        const selectedImage = document.getElementById(elementId);
-        const fileInput = event.target;
-
-        if (fileInput.files && fileInput.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                selectedImage.src = e.target.result;
-            };
-
-            reader.readAsDataURL(fileInput.files[0]);
-        }
-    }
-</script>
 <script src="Structure/Functions/bootstrap.js"></script>
 <script src="Structure/Functions/script.js"></script>
 </body>

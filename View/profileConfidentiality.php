@@ -4,6 +4,7 @@ session_start();
 $pageTitle = "Paramètres - Confidentialité";
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
 require "Includes/PHPMailerAutoload.php";
 
 if(isset($_SESSION['idclient'])) {

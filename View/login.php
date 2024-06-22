@@ -2,6 +2,8 @@
 $pageTitle = "Connexion";
 
 require "Structure/Functions/function.php";
+require "Structure/Functions/alerts.php";
+
 session_start();
 require "Structure/Bdd/config.php";
 
@@ -142,7 +144,7 @@ permaBan();
             <div class="form-group position-relative d-flex">
                 <i class="fas fa-lock fa-lg mt-3"></i>
                 <input type="password" id="password" name="mdp" autocomplete="off" placeholder="Saisissez votre mot de passe" required maxlength="128">
-                <button type="button" class="toggle-password" onclick="togglePassword()">
+                <button type="button" class="toggle-password" onclick="togglePassword('password')">
                     <i class="fas fa-eye mt-3"></i>
                 </button>
             </div>
@@ -150,7 +152,7 @@ permaBan();
 
             <h3 class="text-center text-white font-weight-bold">Interrogation surprise !</h3>
             <p class="text-center text-white mb-3">Afin de continuer votre voyage, merci de bien vouloir répondre à la question suivante (pour vérifier que nos voyageurs ne soient pas des cyborgs).</p>
-            <label class="text-white font-weight-bold">Question : <?php if (isset($captchaQuestion)) echo html_entity_decode($captchaQuestion); ?></label>
+            <label class="text-white font-weight-bold">Question : <?php if (isset($captchaQuestion)) echo str_replace('&#039;', "'", $captchaQuestion); ?></label>
 
             <div class="form-group d-flex position-relative">
                 <i class="fas fa-check fa-lg mt-3"></i>
@@ -166,22 +168,6 @@ permaBan();
         <div class="text-center">
             <p class="text-white">Mot de passe oublié ? <a href="forgotPassword.php">Cliquez-ici</a></p>
         </div>
-
-        <script>
-            function togglePassword() {
-                var passwordField = document.getElementById("password");
-                var passwordToggleBtn = document.querySelector(".toggle-password");
-
-                if (passwordField.type === "password") {
-                    passwordField.type = "text";
-                    passwordToggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                } else {
-                    passwordField.type = "password";
-                    passwordToggleBtn.innerHTML = '<i class="fas fa-eye"></i>';
-                }
-            }
-        </script>
-
         <script src="Structure/Functions/bootstrap.js"></script>
         <script src="Structure/Functions/script.js"></script>
 </body>

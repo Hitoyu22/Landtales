@@ -108,7 +108,7 @@ $theme = $_COOKIE['theme'] ?? 'light';
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <h2 id="quiztext">Question <?php echo $questionIndex; ?> : <?php echo html_entity_decode($questionInfo['question']); ?></h2>
+                        <h2 id="quiztext">Question <?php echo $questionIndex; ?> : <?php echo str_replace('&#039;', "'", $questionInfo['question']); ?></h2>
                     </div>
                 </div>
                 <?php if (!empty($questionInfo['question_picture'])): ?>
@@ -130,7 +130,7 @@ $theme = $_COOKIE['theme'] ?? 'light';
                                         <div class="form-check col-md-6 col-12 mb-2">
                                             <input class="btn-check" type="checkbox" autocomplete="off" name="answers[]" value="<?php echo htmlspecialchars($answer['id']); ?>" id="answer<?php echo htmlspecialchars($answer['id']); ?>">
                                             <label class="btn btn-outline-secondary w-100" for="answer<?php echo htmlspecialchars($answer['id']); ?>">
-                                                <?php echo html_entity_decode($answer['answer']); ?>
+                                                <?php echo str_replace('&#039;', "'", $answer['answer']); ?>
                                             </label>
                                         </div>
                                     <?php }
@@ -139,7 +139,7 @@ $theme = $_COOKIE['theme'] ?? 'light';
                                 <p>Aucune réponse disponible pour cette question.</p>
                             <?php } ?>
                             <div class="col-12 text-end">
-                                <button type="submit" name="nextQuestion" class="btn btn-light btnequizgame" id="quizbtn">Question Suivante</button>
+                                <button type="submit" name="nextQuestion" class="btn btn-light btnequizgame mb-5" id="quizbtn">Question Suivante</button>
                             </div>
                         </form>
                     </div>

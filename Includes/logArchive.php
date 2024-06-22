@@ -3,7 +3,7 @@ $logsFile = '../Admin/Structures/Logs/log.txt';
 
 if (file_exists($logsFile)) {
     $latestLogs = 1;
-    while (file_exists('Admin/Structures/Logs/log' . $latestLogs . '.txt')) {
+    while (file_exists('../Admin/Structures/Logs/log' . $latestLogs . '.txt')) {
         $latestLogs++;
     }
 
@@ -18,10 +18,16 @@ if (file_exists($logsFile)) {
 
     rename($logsFile, '../Admin/Structures/Logs/log1.txt');
 
+    // Création du nouveau fichier de log
     $newLogsFile = fopen($logsFile, 'w');
-    fclose($newLogsFile);
-
-    echo "Archivage des logs effectué avec succès.";
+    if ($newLogsFile) {
+        // Définir les permissions du fichier à 644
+        chmod($logsFile, 0644);
+        fclose($newLogsFile);
+        echo "Archivage des logs effectué avec succès.";
+    } else {
+        echo "Erreur lors de la création du nouveau fichier de log.";
+    }
 } else {
     echo "Le fichier de logs n'existe pas.";
 }

@@ -133,7 +133,6 @@ if (isset($_COOKIE['theme'])) {
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest/dist/editorjs.min.css">
 <link rel="stylesheet" href="../Design/Css/style.css">
-<link rel="stylesheet" href="Design/Css/home-admin.css">
 <link rel="stylesheet" href="../Design/Css/editorjs.css">
 </head>
 <body class="hidden" data-bs-theme="<?php echo $theme; ?>">
@@ -224,21 +223,17 @@ if (isset($_COOKIE['theme'])) {
     </div>
 </div>
 <script>
+    let totalSize = <?php echo $totalExistingSize; ?>;
 
 
     document.addEventListener("DOMContentLoaded", function() {
         const dt = new DataTransfer();
         const MAX_SIZE = 2 * 1024 * 1024;
 
-        let totalSize = <?php echo $totalExistingSize; ?>;
         document.getElementById('total-size').textContent = `Taille totale : ${(totalSize / 1024 / 1024).toFixed(2)} Mo`;
 
         document.getElementById('attachment').addEventListener('change', function(e) {
-            for (let file of dt.files) {
-                totalSize += file.size;
-            }
-
-            for (let file of this.files) {
+            Array.from(this.files).forEach(file => {
                 if (totalSize + file.size > MAX_SIZE) {
                     alert('La taille totale des fichiers dépasse 2 Mo.');
                     return;
@@ -267,8 +262,9 @@ if (isset($_COOKIE['theme'])) {
 
                     for (let i = 0; i < dt.items.length; i++) {
                         if (name === dt.items[i].getAsFile().name) {
+                            let sizeToRemove = dt.items[i].getAsFile().size; // Taille du fichier à supprimer
                             dt.items.remove(i);
-                            totalSize -= file.size; // Soustrait la taille du fichier supprimé de totalSize
+                            totalSize -= sizeToRemove; // Soustrait la taille du fichier supprimé de totalSize
                             break;
                         }
                     }
@@ -290,7 +286,7 @@ if (isset($_COOKIE['theme'])) {
                 document.getElementById('files-names').appendChild(fileBloc);
 
                 dt.items.add(file);
-            }
+            });
 
             this.files = dt.files;
 
