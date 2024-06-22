@@ -216,7 +216,7 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                 if (!empty($donnees) && is_array($donnees)) {
                     $head = tab_keys($donnees[0]);
                     foreach ($head as $column) {
-                        echo "<th scope='col'>".html_entity_decode($column)."</th>";
+                        echo "<th scope='col'>".str_replace('&#039;', "'",$column)."</th>";
                     }
                     echo "<th scope='col'>Modification</th>";
                 } else {
@@ -230,11 +230,11 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
             if (!empty($donnees)) {
                 foreach ($donnees as $objet) {
                     $firstValue = $objet[$head[0]];
-                    echo "<tr><th scope='row'>" . ($firstValue !== null ? html_entity_decode($firstValue) : "Aucun") . "</th>";
+                    echo "<tr><th scope='row'>" . ($firstValue !== null ? str_replace('&#039;', "'",$firstValue) : "Aucun") . "</th>";
                     $banned_keys = [$head[0]];
                     $tab2 = tab_without_first_index($banned_keys, $objet, true);
                     foreach ($tab2 as $attribut) {
-                        echo "<td>" . ($attribut !== null ? html_entity_decode($attribut) : "Aucun") . "</td>";
+                        echo "<td>" . ($attribut !== null ? str_replace('&#039;', "'",$attribut) : "Aucun") . "</td>";
                     }
 
                     // Concaténer les IDs primaires en fonction de la table

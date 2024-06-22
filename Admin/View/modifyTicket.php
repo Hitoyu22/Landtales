@@ -147,7 +147,7 @@ if (isset($_COOKIE['theme'])) {
             <form action="" method="post" class="mx-2" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="ticketTitle" class="form-label">Enoncé d'un ticket</label>
-                    <input id="ticketTitle" type="text" class="form-control" required maxlength="128" name="ticketTitle" placeholder="Saisissez l'énoncé" value="<?php echo html_entity_decode($title); ?>">
+                    <input id="ticketTitle" type="text" class="form-control" required maxlength="128" name="ticketTitle" placeholder="Saisissez l'énoncé" value="<?php echo str_replace('&#039;', "'",$title); ?>">
                 </div>
 
                 <div class="mb-3">

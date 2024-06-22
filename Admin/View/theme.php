@@ -130,7 +130,7 @@ function html_modify_popup($objet) {
                         <?php foreach ($tab_without_id as $key => $value) { ?>
                             <div class="form-group">
                                 <label for="input<?php echo $id . $key; ?>"><?php echo $key; ?></label>
-                                <input type="text" class="form-control" id="input<?php echo $id . $key; ?>" name="<?php echo $id . 'tab[' . $key . ']'; ?>" value="<?php echo html_entity_decode($value); ?>">
+                                <input type="text" class="form-control" id="input<?php echo $id . $key; ?>" name="<?php echo $id . 'tab[' . $key . ']'; ?>" value="<?php echo str_replace('&#039;', "'",$value); ?>">
                             </div>
                         <?php } ?>
                         <input type="hidden" name="update" value="modify">
@@ -178,7 +178,7 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                 if (!empty($donnees) && is_array($donnees)) {
                     $head = tab_keys($donnees[0]);
                     foreach ($head as $column) {
-                        echo "<th scope='col'>".html_entity_decode($column)."</th>";
+                        echo "<th scope='col'>".str_replace('&#039;', "'",$column)."</th>";
                     }
                     echo "<th scope='col'>Modification</th>";
                 } else {
@@ -191,11 +191,11 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
             <?php
             if (!empty($donnees)) {
                 foreach ($donnees as $objet) {
-                    echo "<tr><th scope='row'>".html_entity_decode($objet[$head[0]])."</th>";
+                    echo "<tr><th scope='row'>".str_replace('&#039;', "'",$objet[$head[0]])."</th>";
                     $banned_keys = [$head[0]];
                     $tab2 = tab_without_first_index($banned_keys, $objet, true);
                     foreach ($tab2 as $attribut) {
-                        echo "<td>".html_entity_decode($attribut)."</td>";
+                        echo "<td>".str_replace('&#039;', "'",$attribut)."</td>";
                     }
                     $id = $objet[$head[0]];
                     $query = $bdd->prepare('SELECT COUNT(idtheme) AS count FROM travel WHERE idtheme = ?');
