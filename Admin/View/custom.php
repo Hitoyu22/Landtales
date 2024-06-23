@@ -165,7 +165,7 @@ if (isset($_COOKIE['theme'])) {
                             echo "<td>" . str_replace('&#039;', "'",$row['picture_name']) . "</td>";
                             echo "<td>" . str_replace('&#039;', "'",$row['price']) . "</td>";
                             echo "<td>" . (!empty($row['promo_code']) ? str_replace('&#039;', "'",$row['promo_code']) : "Aucun") . "</td>";
-                            echo "<td>" . (!empty($row['end_date_code']) ? str_replace('&#039;', "'",$row['end_date_code']) : "Aucune") . "</td>";
+                            echo "<td>" . (!empty($row['end_date_code']) ? formatFrenchDat(str_replace('&#039;', "'",$row['end_date_code'])) : "Aucune") . "</td>";
                             echo "<td>";
                             echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
                                     data-custom-id="' . $row['id'] . '"
