@@ -1,6 +1,6 @@
 <?php
 try {
-    $bdd = new PDO('mysql:host=landtales.freeddns.org;dbname=landtales', 'landtales', 'HbGurSuFEnhaqP99111G');
+    $bdd = new PDO('mysql:host=landtales.freeddns.org;dbname=landtales', 'landtales', 'Secret');
 }
 catch(Exception $e)
 {
