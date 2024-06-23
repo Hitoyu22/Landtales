@@ -76,7 +76,7 @@ if (isset($_SESSION['idclient'])) {
         if (isset($_POST['update']) && $_POST['update'] === 'modify') {
             $id = $_POST['id'];
             foreach ($_POST[$id . 'tab'] as $key => $value) {
-                modify_sql($tableName, $id, $key, $value, $bdd);
+                modify_sql($tableName, $id, $key, htmlspecialchars($value), $bdd);
             }
             $redirectUrl = $_SERVER['REQUEST_URI'];
             if (strpos($redirectUrl, '?') !== false) {
@@ -218,7 +218,10 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                     foreach ($head as $column) {
                         echo "<th scope='col'>".str_replace('&#039;', "'",$column)."</th>";
                     }
-                    echo "<th scope='col'>Modification</th>";
+                    if ($nom_table !== 'client' && $nom_table !== 'travel_view' && $nom_table !== 'travel_like' && $nom_table !== 'friend'){
+                        echo "<th scope='col'>Modification</th>";
+
+                    }
                 } else {
                     echo "<tr><td colspan='100%'>Aucune donnée trouvée pour la table '$nom_table'.</td></tr>";
                 }
@@ -255,12 +258,12 @@ function afficher_tableau($donnees, $nom_table,$bdd) {
                     }
 
                     // Vérification si la table est 'client'
-                    if ($nom_table !== 'client') {
+                    if ($nom_table !== 'client' && $nom_table !== 'travel_view' && $nom_table !== 'travel_like' && $nom_table !== 'friend') {
                         echo "<td>
-            <button type='button' class='btn btn-primary' onclick=\"openModifyModal('$id', '$nom_table')\">Modifier</button>
-            <button type='button' class='btn btn-danger' onclick=\"openDeleteModal('$id')\">Supprimer</button>
-          </td>";
-                    } else {
+        <button type='button' class='btn btn-primary' onclick=\"openModifyModal('$id', '$nom_table')\">Modifier</button>
+        <button type='button' class='btn btn-danger' onclick=\"openDeleteModal('$id')\">Supprimer</button>
+    </td>";
+                    } else if ($nom_table !== 'client' && $nom_table !== 'travel_view' && $nom_table !== 'travel_like' && $nom_table !== 'friend') {
                         echo "<td>
             <button type='button' class='btn btn-primary' onclick=\"openModifyModal('$id', '$nom_table')\">Modifier</button>
           </td>";
