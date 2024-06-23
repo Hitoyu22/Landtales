@@ -239,7 +239,7 @@ if (isset($_COOKIE['theme'])) {
                             <input id="question1" name="question1" placeholder="Saisissez la question (obligatoire)" type="text" class="form-control" required autocomplete="off">
                         </div>
                         <div class="p-2 text-start">
-                            <label for="image_question1">Saisissez l'image pour la question 1</label>
+                            <label for="image_question1">Saisissez l'image pour la question</label>
                             <input type="file" id="image_question1" name="image_question1" class="form-control" required autocomplete="off">
                         </div>
                         <div class="p-2 text-start">
