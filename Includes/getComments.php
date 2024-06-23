@@ -20,7 +20,7 @@ if (isset($_GET['commentId'])) {
             $dateReply = $reply['dateComment'];
             $date_formattee_reply = formatFrenchDate($dateReply);
 
-            $iconUser = isset($reply['profil_picture']) ? $reply['profil_picture'] : "http://localhost/src/Design/Pictures/banner_base.png";
+            $iconUser = isset($reply['profil_picture']) ? $reply['profil_picture'] : "https://landtales.freeddns.org/Design/Pictures/banner_base.png";
 
             echo "<div class='reply col-12 d-flex align-items-start mb-3'>";
             echo "<div class='d-flex'>";
