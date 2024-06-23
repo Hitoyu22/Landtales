@@ -208,7 +208,7 @@ function checkUserRole() {
         }
     } else {
 
-        header("Location: votre_page_de_connexion.php");
+        header("Location: login.php");
         exit();
     }
 }
@@ -226,7 +226,7 @@ function checkAdminRole() {
         }
 
     } else {
-        header("Location: votre_page_de_connexion.php");
+        header("Location: login.php");
         exit();
     }
 }
