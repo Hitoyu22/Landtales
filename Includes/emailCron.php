@@ -25,7 +25,7 @@ $mail->SMTPSecure = 'ssl';
 $mail->Host = 'smtp.gmail.com';
 $mail->Port = 465;
 $mail->Username = 'landtales.website@gmail.com';
-$mail->Password = 'brcc snha dbbh ywct';
+$mail->Password = 'Secret';
 $mail->IsHTML(true);
 $mail->From = 'landtales.website@gmail.com';
 $mail->FromName = 'Landtales';
