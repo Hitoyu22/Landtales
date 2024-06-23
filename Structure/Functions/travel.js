@@ -1,7 +1,3 @@
-function hideFocusBorder(button) {
-    button.style.outline = 'none';
-}
-
 function confirmDelete() {
 
     var reason = prompt("Veuillez saisir la raison de la suppression du voyage :");
